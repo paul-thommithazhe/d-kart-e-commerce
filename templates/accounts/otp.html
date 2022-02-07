@@ -1,0 +1,22 @@
+
+{% extends 'home/base.html' %}
+{% load static %}
+{% block content %}
+    <div class="card d-flex justify-content-center mx-auto "style="width: 18rem;margin-top: 6em;margin-bottom:4em">
+        <div class="card-body">
+
+            <form class="container d-flex justify-content-center" action="" method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                  <label for="formGroupExampleInput">Enter the OTP we sent to your registered mobile number.</label>
+                  <input type="number" class="form-control mt-2"  placeholder="Enter the  otp"  style="width: 80%;" name="otp">
+                  <button class="btn btn-primary mt-2">
+                     Verify
+                  </button>
+                </div>
+                
+              </form>
+        </div>
+    </div>
+   
+{% endblock content %}

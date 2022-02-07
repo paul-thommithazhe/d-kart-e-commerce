@@ -1,0 +1,202 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zxx">
+
+
+<!-- Mirrored from demo.dashboardpack.com/user-management-html/index_3.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 29 Jan 2022 06:43:44 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Management Admin</title>
+
+    <link rel="icon" href="{% static 'admin/img/mini_logo.png' %}" type="image/png">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'admin/css/bootstrap.min.css' %}" />
+    <!-- themefy CSS -->
+    <link rel="stylesheet" href="{% static 'admin/vendors/themefy_icon/themify-icons.css' %}" />
+    <!-- select2 CSS -->
+    <link rel="stylesheet" href="{% static 'admin/vendors/niceselect/css/nice-select.css' %}" />
+    <!-- owl carousel CSS -->
+    <link rel="stylesheet" href="{% static 'admin/vendors/owl_carousel/css/owl.carousel.css' %}" />
+    <!-- gijgo css -->
+    <link rel="stylesheet" href="{% static 'admin/vendors/gijgo/gijgo.min.css' %}" />
+    <!-- font awesome CSS -->
+    <link rel="stylesheet" href="{% static 'admin/vendors/font_awesome/css/all.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'admin/vendors/tagsinput/tagsinput.css' %}" />
+
+    <!-- date picker -->
+     <link rel="stylesheet" href="{% static 'admin/vendors/datepicker/date-picker.css' %}" />
+
+     <link rel="stylesheet" href="{% static 'admin/vendors/vectormap-home/vectormap-2.0.2.css' %}" />
+     
+     <!-- scrollabe  -->
+     <link rel="stylesheet" href="{% static 'admin/vendors/scroll/scrollable.css' %}" />
+    <!-- datatable CSS -->
+    <link rel="stylesheet" href="{% static 'admin/vendors/datatable/css/jquery.dataTables.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'admin/vendors/datatable/css/responsive.dataTables.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'admin/vendors/datatable/css/buttons.dataTables.min.css' %}" />
+    <!-- text editor css -->
+    <link rel="stylesheet" href="{% static 'admin/vendors/text_editor/summernote-bs4.css' %}" />
+    <!-- morris css -->
+    <link rel="stylesheet" href="{% static 'admin/vendors/morris/morris.css' %}">
+    <!-- metarial icon css -->
+    <link rel="stylesheet" href="{% static 'admin/vendors/material_icon/material-icons.css' %}" />
+
+    <!-- menu css  -->
+    <link rel="stylesheet" href="{% static 'admin/css/metisMenu.css' %}">
+    <!-- style CSS -->
+    <link rel="stylesheet" href="{% static 'admin/css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'admin/css/colors/default.css' %}" id="colorSkinCSS">
+</head>
+<body class="crm_body_bg">
+    
+
+
+<!-- main content part here -->
+ 
+ <!-- sidebar  -->
+
+ <!--/ sidebar  -->
+
+
+
+<!-- main content part end -->
+
+<!-- ### CHAT_MESSAGE_BOX   ### -->
+
+
+<div class="main_content_iner " style="margin-top:6rem">
+    <div class="container-fluid p-0">
+        <div class="row justify-content-center">
+          <div class="col-12">
+            <div class="dashboard_header mb_50">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="dashboard_header_title">
+                            <h3> </h3>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="dashboard_breadcam text-right">
+                            <p><a href="index-2.html"></a> </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="col-lg-12">
+                <div class="white_box mb_30">
+                    <div class="row justify-content-center">
+                      
+                        <div class="col-lg-6">
+                            <!-- sign_in  -->
+                            {% include  'includes/alerts.html' %}
+                            <div class="modal-content cs_modal">
+                               
+                                <div class="modal-header justify-content-center theme_bg_1">
+                                    <h5 class="modal-title text_white">Admin login</h5>
+                                </div>
+                               
+                                <div class="modal-body">
+                                    <form action="{% url 'admin_login' %} " method="POST">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" placeholder="Enter your email" name="email">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="password" class="form-control" placeholder="Password" name="password">
+                                        </div>
+                                        
+                                        <button type="submit" class="btn btn-primary btn-block"> Login </button>
+                                        
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/### CHAT_MESSAGE_BOX  ### -->
+
+
+
+<!-- footer  -->
+<script src="{% static 'admin/js/jquery-3.4.1.min.js' %}"></script>
+<!-- popper js -->
+<script src="{% static 'admin/js/popper.min.js' %}"></script>
+<!-- bootstarp js -->
+<script src="{% static 'admin/js/bootstrap.min.js' %}"></script>
+<!-- sidebar menu  -->
+<script src="{% static 'admin/js/metisMenu.js' %}"></script>
+<!-- waypoints js -->
+<script src="{% static 'admin/vendors/count_up/jquery.waypoints.min.js' %}"></script>
+<!-- waypoints js -->
+<script src="{% static 'admin/vendors/chartlist/Chart.min.js' %}"></script>
+<!-- counterup js -->
+<script src="{% static 'admin/vendors/count_up/jquery.counterup.min.js' %}"></script>
+
+<!-- nice select -->
+<script src="{% static 'admin/vendors/niceselect/js/jquery.nice-select.min.js' %}"></script>
+<!-- owl carousel -->
+<script src="{% static 'admin/vendors/owl_carousel/js/owl.carousel.min.js' %}"></script>
+
+<!-- responsive table -->
+<script src="{% static 'admin/vendors/datatable/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'admin/vendors/datatable/js/dataTables.responsive.min.js' %}"></script>
+<script src="{% static 'admin/vendors/datatable/js/dataTables.buttons.min.js' %}"></script>
+<script src="{% static 'admin/vendors/datatable/js/buttons.flash.min.js' %}"></script>
+<script src="{% static 'admin/vendors/datatable/js/jszip.min.js' %}"></script>
+<script src="{% static 'admin/vendors/datatable/js/pdfmake.min.js' %}"></script>
+<script src="{% static 'admin/vendors/datatable/js/vfs_fonts.js' %}"></script>
+<script src="{% static 'admin/vendors/datatable/js/buttons.html5.min.js' %}"></script>
+<script src="{% static 'admin/vendors/datatable/js/buttons.print.min.js' %}"></script>
+
+<!-- datepicker  -->
+<script src="{% static 'admin/vendors/datepicker/datepicker.js' %}"></script>
+<script src="{% static 'admin/vendors/datepicker/datepicker.en.js' %}"></script>
+<script src="{% static 'admin/vendors/datepicker/datepicker.custom.js' %}"></script>
+
+<script src="{% static 'admin/js/chart.min.js' %}"></script>
+<script src="{% static 'admin/vendors/chartjs/roundedBar.min.js' %}"></script>
+
+<!-- progressbar js -->
+<script src="{% static 'admin/vendors/progressbar/jquery.barfiller.js' %}"></script>
+<!-- tag input -->
+<script src="{% static 'admin/vendors/tagsinput/tagsinput.js' %}"></script>
+<!-- text editor js -->
+<script src="{% static 'admin/vendors/text_editor/summernote-bs4.js' %}"></script>
+<script src="{% static 'admin/vendors/am_chart/amcharts.js' %}"></script>
+
+<!-- scrollabe  -->
+<script src="{% static 'admin/vendors/scroll/perfect-scrollbar.min.js' %}"></script>
+<script src="{% static 'admin/vendors/scroll/scrollable-custom.js' %}"></script>
+
+<!-- vector map  -->
+<script src="{% static 'admin/vendors/vectormap-home/vectormap-2.0.2.min.js' %}"></script>
+<script src="{% static 'admin/vendors/vectormap-home/vectormap-world-mill-en.js' %}"></script>
+
+<!-- apex chrat  -->
+<script src="{% static 'admin/vendors/apex_chart/apex-chart2.js' %}"></script>
+<script src="{% static 'admin/vendors/apex_chart/apex_dashboard.js' %}"></script>
+
+<!-- <script src="vendors/echart/echarts.min.js"></script> -->
+
+
+<script src="{% static 'admin/vendors/chart_am/core.js' %}"></script>
+<script src="{% static 'admin/vendors/chart_am/charts.js' %}"></script>
+<script src="{% static 'admin/vendors/chart_am/animated.js' %}"></script>
+<script src="{% static 'admin/vendors/chart_am/kelly.js' %}"></script>
+<script src="{% static 'admin/vendors/chart_am/chart-custom.js' %}"></script>
+<!-- custom js -->
+<script src="{% static 'admin/js/dashboard_init.js' %}"></script>
+<script src="{% static 'admin/js/custom.js' %}"></script>
+</body>
+
+<!-- Mirrored from demo.dashboardpack.com/user-management-html/index_3.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 29 Jan 2022 06:43:45 GMT -->
+</html>

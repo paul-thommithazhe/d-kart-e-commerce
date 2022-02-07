@@ -1,0 +1,129 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% block content %}
+
+
+<section class="section-content bg-white padding-y">
+    <div class="container">
+
+        <!-- ============================ ITEM DETAIL ======================== -->
+        <div class="row">
+            <aside class="col-md-6">
+                <div class="card">
+                    <article class="gallery-wrap">
+                        <div class="img-big-wrap">
+                            <div > <a href="#"><img src="{{ single_product.images.url }}"
+                                        data-zoom-image={{single_product.images.url}} id="zoom" class="ProductImg"></a></div>
+                        </div> <!-- slider-product.// -->
+                        <div class="thumbs-wrap">
+                            <a href="#" class="item-thumb"> <img src="{{ single_product.images.url }}"  class="small-img"></a>
+                            <a href="#" class="item-thumb"> <img src="{{ single_product.images_two.url }}"  class="small-img"></a>
+                            <a href="#" class="item-thumb"> <img src="{{ single_product.images_three.url }}"  class="small-img"></a>
+                        </div> <!-- slider-nav.// -->
+                    </article> <!-- gallery-wrap .end// -->
+                </div> <!-- card.// -->
+            </aside>
+            <main class="col-md-6 border-left">
+                <form action="{% url 'add_cart' single_product.id %}" method="GET">
+                    {% csrf_token %}
+                    <article class="content-body">
+
+                        <h2 class="title">{{ single_product.product_name }}</h2>
+
+                        <div class="mb-3">
+                            <var class="price h4">Rs.{{ single_product.price }}</var>
+                        </div>
+
+                        <p>{{ single_product.description }}</p>
+
+
+                        <hr>
+                        <!-- <div class="row">
+                            <div class="item-option-select">
+                                <h6>Choose Color</h6>
+                                <select name="color" class="form-control" required>
+                                    <option disabled selected>select</option>
+                                    {% for i in single_product.variation_set.colors %}
+                                    <option value="{{ i.variation_value }}">{{ i.variation_value | capfirst }}</option>
+                                   {% endfor %}
+                                </select>
+                            </div>
+                        </div>  -->
+                        <!-- <div class="row"> -->
+                            <!-- <div class="item-option-select">
+                                <h6>Select Size</h6>
+                                <select name="size" class="form-control">
+                                    <option disabled selected>select</option>
+                                    {% for i in single_product.variation_set.sizes %}
+                                    <option value="s">{{ i.variation_value | capfirst }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>  -->
+                           
+                        <!-- </div>  -->
+                        <!-- <hr> -->
+                        {% if single_product.stock <= 0 %}
+                        <h5 class = "text-danger"> out of stock </h5>
+                        {% else %}
+                            {% if in_cart %}
+                            <a href="#" class="btn  btn-success"> <span class="text">Added to cart</span> <i class="fas fa-check"></i> </a>
+                            <a href="{% url 'cart' %}" class="btn  btn-outline-primary"> <span class="text">View Cart</span> <i class="fas fa-eye"></i> </a>
+                            {% else %}
+                            <button type="submit" class="btn  btn-primary"> <span class="text">Add to cart</span> <i class="fas fa-shopping-cart"></i> </button>
+                            {% endif %}
+                        <!-- <a href="{% url 'add_cart' single_product.id %}" class="btn  btn-primary"> <span class="text">Add to cart</span> <i class="fas fa-shopping-cart"></i> </a> -->
+                        {% endif %}
+                    </article>
+                </form>
+                    <!-- product-info-aside .// -->
+            </main> <!-- col.// -->
+        </div> <!-- row.// -->
+
+        <!-- ================ ITEM DETAIL END .// ================= -->
+
+
+    </div> <!-- container .//  -->
+</section>
+<!-- Elevate Zoom JS -->
+<script src="{% static 'custom/user_product/js/jquery.elevateZoom-3.0.8.min.js' %}"></script>
+<script>
+
+
+    $("#zoom").elevateZoom({
+        zoomType: 'inner',
+        cursor: 'crosshair'
+    });
+
+
+jQuery("#elevate-zoom").elevateZoom({
+    gallery: 'more-vies',
+    lensSize: 200,
+    cursor: 'pointer',
+    galleryActiveClass: 'active',
+    imageCrossfade: true,
+    scrollZoom : true,
+    responsive: true
+    });
+    
+</script>
+<script>
+    var ProductImg = document.getElementById("zoom");
+    var SmallImg = document.getElementsByClassName("small-img");
+    SmallImg[0].onclick = function()
+    {
+        ProductImg.src = SmallImg[0].src;
+
+    }
+    SmallImg[1].onclick = function()
+    {
+        ProductImg.src = SmallImg[1].src;
+    }
+    SmallImg[2].onclick = function()
+    {
+        ProductImg.src = SmallImg[2].src;
+    }
+</script>
+<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js'></script>
+<script src='https://sachinchoolur.github.io/lightslider/dist/js/lightslider.js'></script>
+
+{% endblock content %}
