@@ -10,13 +10,55 @@
                 <div class="form-group">
                   <label for="formGroupExampleInput">Enter the OTP we sent to your registered mobile number.</label>
                   <input type="number" class="form-control mt-2"  placeholder="Enter the  otp"  style="width: 80%;" name="otp">
-                  <button class="btn btn-primary mt-2">
+                 
+                  <button class="btn btn-primary mt-2" id="ver_btn" >
                      Verify
                   </button>
                 </div>
                 
               </form>
+              <div class="d-flex">
+                <span class="text-danger">Resend OTP in </span>
+                <h6 class="ml-2"id="count"></h6>
+              </div>
+             
+             
         </div>
+
+
     </div>
+   <script>
+
+    
+      var i =10;
+      var min=0;
+      var sec=10;
+      var x = setInterval(function(){
+        if(i>=0){
+          if(sec<10){
+            se='0'+sec
+          }
+          else{
+            se=sec
+          }
+          document.getElementById("count").innerHTML = '0'+min+':'+se;
+          i--;
+          if(sec==0){
+            sec=59;
+            min--;
+          }
+          else{
+            --sec;
+          }
+        }
+        else{
+          clearInterval(x);
+          document.getElementById("ver_btn").innerHTML='Resend'
+        }
+        
+      },1000)
+
+
+   </script>
    
 {% endblock content %}

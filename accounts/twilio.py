@@ -8,7 +8,7 @@ def otp_send(phone_number):
     client = Client(account_sid, auth_token)
 
     verification = client.verify \
-        .services('VA851b11d635555ed67decbfb16de2a130') \
+        .services(config('service')) \
         .verifications \
         .create(to="+91"+phone_number, channel='sms')
         
@@ -21,7 +21,7 @@ def otp_verify(otp, phone):
     client = Client(account_sid, auth_token)
 
     verification_check = client.verify \
-        .services('VA851b11d635555ed67decbfb16de2a130') \
+        .services(config('service')) \
         .verification_checks \
         .create(to="+91"+phone, code=otp)
 

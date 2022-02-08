@@ -112,7 +112,7 @@ def login(request):
 def mob_login(request):
     if request.method == 'POST':
         phone_number = request.POST['phone_number']
-        user_mob = Account.objects.filter(phone_number= phone_number)
+        user_mob = Account.objects.get(phone_number= phone_number)
         # print(user_mob.email)
         
         print("_____")
@@ -148,24 +148,59 @@ def otp(request):
     if request.method == 'POST':
         otp_ver = request.POST['otp']
         phone = request.session['phone_number']
-        if otp_verify(otp_ver, phone) == 'approved':
-            user_account = Account.objects.get(phone_number=phone)
-            print(user_account)
-            if not user_account.is_active:
-                user_account.is_active = True
-                user_account.save()
-                try:
-                    del request.session['phone']
+        try:
+            if otp_verify(otp_ver, phone) == 'approved':
+                user_account = Account.objects.get(phone_number=phone)
+                print(user_account)
+                if not user_account.is_active:
+                    user_account.is_active = True
+                    user_account.save()
+                    try:
+                        del request.session['phone']
+                        return redirect('/')
+                    except:
+                        return redirect('/')
+                if user_account.is_active and not user_account.superuser:
+                    request.session['email'] = user_account.email
+                    print('------')
+                    print(request.session['email'])
                     return redirect('/')
-                except:
-                    return redirect('/')
+                else:
+                    messages.error(request,'invalid user')
+                    return redirect('mob_login')
             else:
-                request.session['email'] = user_account.email
-                print( request.session['email'])
-                return redirect('/') 
+                messages.error(request,'enter a valid otp')
+                return redirect('otp_verify')
+        except:
+            pass      
     else:
         return render(request, 'accounts/otp.html')
 
 
+import time
+  
+# define the countdown func.
+# def countdown(t):
+#     while t:
+#         mins, secs = divmod(t, 60)
+#         timer = '{:02d}:{:02d}'.format(mins, secs)
+#         print(timer, end="\r")
+#         time.sleep(1)
+#         t -= 1
+
+#     print('hello thushad!!')
+#     return redirect ('otp')
+  
+  
+# # input time in seconds
+# t = input("Enter the time in seconds: ")
+  
+# # function call
+# countdown(t=10)
+
+
+
 def dashboard(request):
-    return render(request,'accounts/dashboard.html')
+    if request.user_is_authenticated:
+        return render(request,'accounts/dashboard.html')
+    return render('login')
