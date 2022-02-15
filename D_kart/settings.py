@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'store',
     'admin_panel',
     'crispy_forms',
-    'carts'
+    'carts',
+    'orders',
     
 
 ]

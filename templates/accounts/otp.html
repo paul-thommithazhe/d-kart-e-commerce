@@ -4,7 +4,7 @@
 {% block content %}
     <div class="card d-flex justify-content-center mx-auto "style="width: 18rem;margin-top: 6em;margin-bottom:4em">
         <div class="card-body">
-
+          {% include 'includes/alerts.html' %}
             <form class="container d-flex justify-content-center" action="" method="POST">
                 {% csrf_token %}
                 <div class="form-group">
@@ -18,14 +18,10 @@
                 
               </form>
               <div class="d-flex">
-                <span class="text-danger">Resend OTP in </span>
+                <span class="text-danger">Resend OTP in</span>
                 <h6 class="ml-2"id="count"></h6>
               </div>
-             
-             
         </div>
-
-
     </div>
    <script>
 

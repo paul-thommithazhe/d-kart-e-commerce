@@ -1,11 +1,13 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import authenticate
 from django.contrib import messages, auth
+
+from orders.models import Order
 from .twilio import otp_send,otp_verify
 from carts.models import Cart,CartItem
 from django.http import HttpResponse
-from .forms import RegistrationForm
+from .forms import RegistrationForm, UserForm
 from carts.views import _cart_id
 from .models import Account
 from decouple import config
@@ -53,10 +55,6 @@ def register(request):
     }
     
     return render(request, 'accounts/register.html', context)
-
-
-
-
 
 def login(request):
     if request.method == 'POST':
@@ -110,31 +108,35 @@ def login(request):
     return render(request, 'accounts/login.html')
 
 def mob_login(request):
-    if request.method == 'POST':
-        phone_number = request.POST['phone_number']
-        user_mob = Account.objects.get(phone_number= phone_number)
-        # print(user_mob.email)
-        
-        print("_____")
-        print(user_mob)
-        
-        if user_mob:
-            otp_send(phone_number)
-            request.session['phone_number'] = phone_number
-            print('redirecting to otp page')
-            return redirect('otp')
+    try:
+        if request.method == 'POST':
+            phone_number = request.POST['phone_number']
+            user_mob = Account.objects.get(phone_number= phone_number)
+            # print(user_mob.email)
+            print("_____")
+            print(user_mob)
             
-        else:
-            print(phone_number)
-            messages.error(request,'Phone number not registered create an account')
-            return redirect('login')
-    return render(request,'accounts/mob_login.html')
+            if user_mob:
+                print('L-------------------------------------------')
+                otp_send(phone_number)
+                request.session['phone_number'] = phone_number
+                print('redirecting to otp page')
+                return redirect('otp')
+                
+            else:
+                print(phone_number)
+                messages.error(request,'Phone number not registered create an account')
+                return redirect('login')
+        return render(request,'accounts/mob_login.html')
 
-
+    except:
+        messages.error(request,'enter a valid number') 
+        return redirect('mob_login')
 
 
 def logout(request):
-    del request.session['email']
+    if request.session.has_key('email'):
+        del request.session['email']
     auth.logout(request)
    
     print('------------------------------------------------------------------------------')
@@ -152,7 +154,14 @@ def otp(request):
             if otp_verify(otp_ver, phone) == 'approved':
                 user_account = Account.objects.get(phone_number=phone)
                 print(user_account)
-                if not user_account.is_active:
+                if user_account.is_active:
+                    request.session['email'] = user_account.email
+                    print('------')
+                    
+                    print('helooooooooooo')
+                    auth.login(request.user_account)
+                    return redirect('/')
+                elif not user_account.is_active:
                     user_account.is_active = True
                     user_account.save()
                     try:
@@ -160,19 +169,17 @@ def otp(request):
                         return redirect('/')
                     except:
                         return redirect('/')
-                if user_account.is_active and not user_account.superuser:
-                    request.session['email'] = user_account.email
-                    print('------')
-                    print(request.session['email'])
-                    return redirect('/')
+                
                 else:
                     messages.error(request,'invalid user')
                     return redirect('mob_login')
             else:
                 messages.error(request,'enter a valid otp')
-                return redirect('otp_verify')
+                return redirect('otp')
         except:
-            pass      
+            messages.error(request,'ente a valid OTP')
+            return redirect('otp') 
+                 
     else:
         return render(request, 'accounts/otp.html')
 
@@ -201,6 +208,99 @@ import time
 
 
 def dashboard(request):
-    if request.user_is_authenticated:
-        return render(request,'accounts/dashboard.html')
-    return render('login')
+
+    if 'email' in request.session :
+        order = Order.objects.order_by('-created_at').filter(user_id= request.user.id, is_ordered = True)
+        orders_count = order.count()
+        
+        context = {
+            'orders_count':orders_count,
+        }
+        return render(request,'accounts/dashboard.html',context)
+    return render(request,'accounts/login.html')
+
+def my_orders(request):
+    if request.user.is_authenticated:
+        order = Order.objects.filter(user_id = request.user.id, is_ordered = True).order_by('-created_at')
+        context = {
+            'orders':order,
+        }
+        return render(request,'accounts/my_orders.html',context)
+    return render(request,'accounts/login.html')
+
+def edit_profile(request):
+    
+    if request.user.is_authenticated:
+        user_form = UserForm(request.POST or None,request.FILES or None , instance = request.user)
+        if request.method == "POST":
+            if user_form.is_valid():
+                user_form.save()
+                messages.success(request,'you profile has been updated')
+                return redirect('edit_profile')
+            
+            else:
+                print(user_form.errors)
+        context = {
+            'user_form':user_form,
+        }
+        
+        return render(request,'accounts/edit_profile.html',context)
+    return redirect('login')
+
+def change_password(request):
+
+    # if 'email' in request.session:
+    #     if request.method == 'POST':
+    #         curr = request.POST['current_password']
+    #         new = request.POST['new_password']
+    #         u = Account.objects.get(email=request.session['email'])
+    #         if authenticate(email=u, password=curr):
+    #             print('authenticate')
+    #             u.set_password(new)
+    #             u.save()
+    #             print(request.session['email'])
+    #             return redirect('dashboard')
+
+    # print(request.session['email'])
+
+    # return render(request, 'accounts/change_password.html')
+
+
+
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            current_password = request.POST['current_password']
+            new_password = request.POST['new_password']
+            confirm_password = request.POST['confirm_password']
+
+            user = Account.objects.get(email__exact = request.user.email)
+            if new_password == confirm_password:
+                print('new password field ')
+
+                success = user.check_password(current_password)
+                if success:
+                    print('success page')
+                    print(request.session['email'])
+                    user.set_password(new_password)
+                    user.save()
+                    messages.success(request,'password changed')
+                    print(request.user)
+                    # print(request.session['email'])
+                    request.session['email'] = user.email
+                    print(request.user)
+
+                    user_b = authenticate(email = user.email, password = new_password)
+                    print(user_b,'==========================')
+
+                    auth.login(request, user=user_b)
+
+                    return redirect('/accounts/dashboard/')
+                else:
+                    messages.error(request,'enter a valid password')
+                    return redirect('change_password')
+            else:
+                messages.error(request,'password does not match')
+                return redirect('change_password')
+
+        return render(request,'accounts/change_password.html')
+    return redirect('login')

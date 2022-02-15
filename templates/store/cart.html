@@ -49,20 +49,22 @@
         <td> 
             <!-- col.// -->
                         <div class="col"> 
+
+                            {% include 'includes/alerts.html' %}
                             <div class="input-group input-spinner">
                                 <div class="input-group-prepend">
-                                <a href="{% url 'remove_cart' cart_item.product.id cart_item.id %}" class="btn btn-light" type="button" id="button-plus"> <i class="fa fa-minus"></i> </a>
+                                <a href="{% url 'remove_cart' cart_item.product.id cart_item.id %}" class="btn btn-light" type="button" id="button-minus"> <i class="fa fa-minus"></i> </a>
                                 </div>
-                                <input type="text" class="form-control"  value="{{ cart_item.quantity }}">
+                                <input type="text" class="form-control" id="qty{{ cart_item.id }}"  value="{{ cart_item.quantity }}">
                                 <div class="input-group-append">
-                                    <form action="{% url 'add_cart' cart_item.product.id %}" method="POST">
-                                        {% csrf_token %}
+                                    <!-- <form action="{% url 'add_cart' cart_item.product.id %}" method="POST"> -->
+                                        <!-- {% csrf_token %} -->
                                         {% for item in cart_item.variations.all %}
                                         <input type="hidden" name="{{ item.variation_category | lower }}" value="{{ item.variation_value | capfirst}}">
                                         
                                         {% endfor %}
-                                        <button   class="btn btn-light" type="submit" id="button-minus"> <i class="fa fa-plus"></i> </button>
-                                    </form>
+                                        <button   class="btn btn-light button_plus" type="submit" id="button-plus" value="{{ cart_item.id }}"> <i class="fa fa-plus"></i> </button>
+                                    <!-- </form> -->
                                 
                                 </div>
                             </div> <!-- input-group.// -->
@@ -70,11 +72,15 @@
         </td>
         <td> 
             <div class="price-wrap"> 
-                <var class="price">Rs.{{ cart_item.sub_total }}</var> 
-                <small class="text-muted" style="color: black !important;"> Rs.{{ cart_item.product.price }} each </small>
+               
+                <var class="price" id="sub{{ cart_item.id }}">Rs.{{ cart_item.sub_total }} </var> 
+                <small class="text-muted" style="color: black !important;"> Rs.{{ cart_item.product.offer_price }} each </small>
+               
+                
+                <!--   -->
             </div> <!-- price-wrap .// -->
         </td>
-        <td class="text-right"> 
+        <td class="text-right md-3"> 
             <a href="{% url 'remove_cart_item' cart_item.product.id cart_item.id %}" class="btn btn-danger"> Remove</a>
         </td>
     </tr>
@@ -89,8 +95,8 @@
             <div class="card">
             <div class="card-body">
                 <dl class="dlist-align">
-                  <dt>Total price:</dt>
-                  <dd class="text-right">{{ total }}</dd>
+                  <!-- <dt>Total price:</dt> -->
+                  <!-- <dd class="text-right">{{ grand_total }}</dd> -->
                 </dl>
                 <!-- <dl class="dlist-align">
                   <dt>Tax:</dt>
@@ -98,7 +104,7 @@
                 </dl> -->
                 <dl class="dlist-align">
                   <dt>Grand Total:</dt>
-                  <dd class="text-right text-dark b"><strong>Rs.{{ grand_total }}</strong></dd>
+                  $<dd class="text-right text-dark b" id="grand_total"><strong>{{ grand_total }}</strong></dd>
                 </dl>
                 <hr>
                 <p class="text-center mb-3">
@@ -118,4 +124,34 @@
     </div> <!-- container .//  -->
 </section>
 
+
+<script>
+$(document).on('click','.button_plus',function(){
+var id = $(this).val()
+var total = $("#grand_total").text()
+console.log(total)
+$.ajax({
+    url:"{% url 'add_btn_cart' %}",
+    type:'GET',
+    data:{
+        mid:id,
+        total:total
+    },
+    dataType:'json',
+    success:function(red){
+        if(red.f==1){
+            alert("out of stock")
+        }
+        else{
+            $("#qty"+id).val(red.qty)
+        $("#sub"+id).text(red.sub)
+        $("#grand_total").text(red.gt)
+        }
+        
+    }
+})
+})
+
+
+</script>
 {% endblock content %}

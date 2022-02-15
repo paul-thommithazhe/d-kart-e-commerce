@@ -1,8 +1,10 @@
 import re
+from statistics import quantiles
 from django.shortcuts import get_object_or_404, redirect, render
 from django.core.exceptions import ObjectDoesNotExist
 from carts.models import Cart, CartItem
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+from orders.models import AddressTable
 from store.models import Product, Variation
 from doctest import Example
 from urllib import request
@@ -134,6 +136,32 @@ def add_cart(request,product_id):
             cart_item.save()
         return redirect('cart')
 
+
+def add_btn_cart(request):
+    mid=int(request.GET['mid'])
+    total = float(request.GET['total'])
+    cartitem = CartItem.objects.get(id=mid) #get the product
+    if cartitem.product.stock > cartitem.quantity:
+        cartitem.quantity += 1
+        cartitem.save()
+        sub_total = cartitem.sub_total()
+        grand_total = total + cartitem.product.offer_price
+        context ={
+            'qty':cartitem.quantity,
+            'sub':sub_total,
+            'gt':grand_total,
+            'f':0
+        }
+        return JsonResponse(context)
+    else:
+        return JsonResponse({'f':1})
+        
+
+    
+        
+
+
+
 def remove_cart(request,product_id,cart_item_id):
     product = get_object_or_404(Product,id = product_id)
     if request.user.is_authenticated:
@@ -174,7 +202,7 @@ def cart(request,total =0,quantity = 0,cart_items =None):
             cart = Cart.objects.get(cart_id = _cart_id(request))
             cart_items = CartItem.objects.filter(cart = cart,is_active =True)
         for cart_item in cart_items:
-            total += (cart_item.product.price * cart_item.quantity)
+            total += (cart_item.product.offer_price * cart_item.quantity)
             quantity += cart_item.quantity
         
     except ObjectDoesNotExist:
@@ -188,6 +216,8 @@ def cart(request,total =0,quantity = 0,cart_items =None):
     }
     return render(request,'store/cart.html' ,context)
 
+
+
 def checkout(request,total =0,quantity = 0,cart_items =None):
     if request.user.is_authenticated:
         if request.session.has_key('email'):
@@ -195,14 +225,16 @@ def checkout(request,total =0,quantity = 0,cart_items =None):
                 #getting the cart id by using the session id
                 cart_items = CartItem.objects.filter(user = request.user,is_active =True)
                 for cart_item in cart_items:
-                    total += (cart_item.product.price * cart_item.quantity)
+                    total += (cart_item.product.offer_price * cart_item.quantity)
                     quantity += cart_item.quantity
-                grand_total = total  
+                grand_total = total 
+                add_table =  AddressTable.objects.filter(user = request.user)
                 context = {
                 'total': total,
                 'quantity' : quantity,
                 'cart_items': cart_items,
                 'grand_total':grand_total,
+                'add_table':add_table,
 
             }     
                 return render(request,'store/checkout.html',context)

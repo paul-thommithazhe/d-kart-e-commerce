@@ -157,10 +157,24 @@
 								<div class="fix-height">
 									<h6>{{ product.brand }}</h6>
 									<a href="{{ product.get_url }}" class="title">{{ product.product_name }}</a>
+									{% if product.category.category_offer > 0 or product.offer > 0 %}
 									<div class="price-wrap mt-2">
-										<span class="price">Rs.{{ product.price }}</span>
+										<span class="price">${{ product.offer_price }}</span>
+										<del>${{product.price}}</del>
+										{% if product.category.category_offer >= product.offer %}
+										<span style="color: rgb(34, 235, 44);">({{product.category.category_offer}}% off)</span>
+									
+										{% else %}
+										<span style="color: rgb(34, 235, 44);">({{product.offer}}% off)</span>
+										<h1>hello</h1>
+										{% endif %}
+									</div>
+									{% else %}
+									<div class="price-wrap mt-2">
+										<span class="price">${{ product.price }}</span>
 
-									</div> <!-- price-wrap.// -->
+									</div>
+									{% endif %} <!-- price-wrap.// -->
 								</div>
 								<a href="{{ product.get_url }}" class="btn btn-block btn-primary">view details </a>
 							</figcaption>

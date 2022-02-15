@@ -7,6 +7,7 @@
 
 
 
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
 <div class="main_content_iner ">
@@ -80,8 +81,8 @@
                                             {% endif %}
                                             <td>{{ product.category}}</td>
                                             <td>{{ product.created_date }}</td>
-                                            <td><a href="{% url 'admin_add_product' %}" class="status_btn_edit">Edit</a></td>
-                                            <td><a href="{% url 'p_delete' product.id %}" class="status_btn_delete">Delete</a></td>
+                                            <td><a href="{% url 'admin_update_product' product.id %}" class="status_btn_edit">Edit</a></td>
+                                            <td><a class="status_btn_delete"onclick="deleteBtn({{product.id}})" id="basic_alert">Delete</a></td>
                                             <!-- {% if user.is_active %}
                                             <td><a href="#" class="status_btn">Active</a></td>
                                             {% else %}
@@ -95,6 +96,26 @@
                                         </tr>
                                         
                                         {% endfor %}
+
+                                        <script>
+                                            function deleteBtn(id){
+                                                Swal.fire({
+                                                    title: 'Are you sure?',
+                                                    text: "Do you really want to delete  it!",
+                                                    icon: 'warning',
+                                                    showCancelButton: true,
+                                                    confirmButtonColor: '#3085d6',
+                                                    cancelButtonColor: '#d33',
+                                                    confirmButtonText: 'Yes, delete it!'
+                                                  }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        
+
+                                                        window.location='/admin_panel/p_delete/'+id+'/'
+                                                    }
+                                                  })
+                                            }
+                                        </script>
                                         
                                     </tbody>
                                 </table>
@@ -142,7 +163,12 @@
       
 </style>
 
-
-
-
+<script type="text/javascript">
+    function delete_button(){
+        swal('hello')
+    }
+    
+</script>
+<script src="@@path/vendor/sweetalert2/dist/sweetalert2.all.min.js"></script>
+<link type="text/css" href="@@path/vendor/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
 {% endblock content %}

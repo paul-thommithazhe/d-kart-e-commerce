@@ -6,14 +6,15 @@
 
     <!-- ============================ COMPONENT LOGIN   ================================= -->
         <div class="card mx-auto" style="max-width: 380px; margin-top:100px;">
-            {% include 'includes/alerts.html' %}
+           
           <div class="card-body">
+            {% include 'includes/alerts.html' %}
           <h4 class="card-title mb-4">Login with phone number</h4>
           <form action="{% url 'mob_login' %}" id="forget_password" method="POST" >
               {% csrf_token %}
               <div class="form-group">
                 <h6 class="card-title mb-2">Enter phone number</h6>
-                 <input required class="form-control" type="number" placeholder="Enter phone number" id="mobile" name="phone_number" >
+                 <input  class="form-control" type="text" pattern="\d*" maxlength="10" placeholder="Enter phone number"  name="phone_number" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" id="mob_otp_login">
               </div>           
               <div class="form-group">
                   <button type="submit" style="background-color: #3b47e9; color:white" class="btn btn-block" > Submit </button>
@@ -27,4 +28,32 @@
         </div> <!-- card .// -->
     </section>
 
+    <script>
+        function isNumber(evt) {
+          evt = (evt) ? evt : window.event;
+          var charCode = (evt.which) ? evt.which : evt.keyCode;
+          if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            alert("Please enter only Numbers.");
+            return false;
+          }
+        
+          return true;
+        }
+        
+        function ValidateNo() {
+          var phoneNo = document.getElementById('mob_otp_login');
+        
+          if (phoneNo.value == "" || phoneNo.value == null) {
+            alert("Please enter your Mobile No.");
+            return false;
+          }
+          if (phoneNo.value.length < 10 || phoneNo.value.length > 10) {
+            alert("Mobile No. is not valid, Please Enter 10 Digit Mobile No.");
+            return false;
+          }
+        
+          alert("Success ");
+          return true;
+        }
+        </script>
 {% endblock %}

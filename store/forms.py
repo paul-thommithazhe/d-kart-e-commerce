@@ -1,12 +1,12 @@
 from django import forms
-from .models import Product
+from .models import Product,Variation
 
 
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = ['product_name', 'price', 'images', 'images_two',
-                  'images_three', 'description', 'stock',  'brand']
+                  'images_three', 'description', 'stock','category','brand']
    
     
         widgets = {
@@ -17,6 +17,17 @@ class ProductForm(forms.ModelForm):
             'images_three':forms.FileInput(attrs={'class':'form-control'}),
             'description':forms.Textarea(attrs={'class':'form-control'}),
             'stock':forms.NumberInput(attrs={'class':'form-control'}),
+            'category':forms.Select(attrs={'class':'form-control'}),
             'brand':forms.Select(attrs={'class':'form-control'}),
+    
         }
-   
+class VariationForm(forms.ModelForm):
+    class Meta:
+        model = Variation
+        fields = ['variation_category', 'variation_value',]
+        widgets = {
+            'product':forms.TextInput(attrs={'class':'form-control'}),
+            'variation_category':forms.Select(attrs={'class':'form-control'}),
+            'variation_value':forms.TextInput(attrs={'class':'form-control'}),
+    
+        }

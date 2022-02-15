@@ -12,6 +12,9 @@ urlpatterns = [
     path('otp/',views.otp, name = 'otp'),
     path('mob_login/',views.mob_login, name = 'mob_login'),
     path('dashboard/',views.dashboard,name= 'dashboard'),
+    path('my_orders/',views.my_orders,name= 'my_orders'),
+    path('edit_profile/',views.edit_profile,name= 'edit_profile'),
+    path('change_password/',views.change_password,name= 'change_password'),
     
     
 ]
