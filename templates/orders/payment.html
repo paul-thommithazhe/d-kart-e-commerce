@@ -101,7 +101,7 @@
                 </dl> -->
                 <dl class="dlist-align">
                   <dt>Grand Total:</dt>
-                  <dd class="text-right text-dark b"><strong>Rs.{{ grand_total }}</strong></dd>
+                  <dd class="text-right text-dark b"><strong>${{ grand_total }}</strong></dd>
                 </dl>
                 <hr>
                 <p class="text-center mb-3">
@@ -144,6 +144,7 @@ var url = "{% url 'payments' %}"
 var csrftoken = getCookie('csrftoken');
 var orderID = "{{order.order_number}}"
 var payment_method = 'PayPal'
+var redirect_url = "{% url 'order_complete' %}"
   // Render the PayPal button into #paypal-button-container
   
   paypal.Buttons({

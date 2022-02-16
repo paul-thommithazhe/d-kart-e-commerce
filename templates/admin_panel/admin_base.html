@@ -71,6 +71,7 @@
             <a class="has-arrow" href="#" aria-expanded="false">
                 <div class="nav_icon_small">
                     <img src="{% static 'admin/img/menu-icon/dashboard.svg' %}" alt="">
+                    <!-- <h6>Profile</h6> -->
                 </div>
                 <div class="nav_title">
                     <span>User Management </span>
@@ -114,6 +115,23 @@
               <li><a href="error_500.html">Error 500</a></li>
               <li><a href="forgot_pass.html">Forgot Password</a></li>
               <li><a href="gallery.html">Gallery</a></li> -->
+            </ul>
+        </li>
+        <li class="">
+            <a class="has-arrow" href="#" aria-expanded="false">
+                <div class="nav_icon_small">
+                    <img src="{% static 'admin/img/menu-icon/2.svg' %}" alt="">
+                </div>
+                <div class="nav_title">
+                    <span>Offer <br> Management</span>
+                </div>
+            </a>
+            <ul>
+              <li><a href="{% url 'admin_category_list' %}">Category Offer</a></li>
+              
+              <li><a href="mail_box.html">Product Offer</a></li>
+              <!-- <li><a href="chat.html">Chat</a></li>
+              <li><a href="faq.html">FAQ</a></li> --> -->
             </ul>
         </li>
         <li class="">
@@ -237,7 +255,8 @@
                             </li>
                         </div>
                         <div class="profile_info">
-                            <img src="{% static 'admin/img/client_img.png' %}" alt="#">
+                            <!-- <img src="{% static 'admin/img/client_img.png' %}" alt="#"> -->
+                            <h6><a href="">Profile</a></h6>
                             <div class="profile_info_iner">
                                 <div class="profile_author_name">
                                     {% if user.is_authenticated %}

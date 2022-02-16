@@ -28,7 +28,7 @@ def place_order(request, total=0, quantity=0):
         total += (cart_item.product.offer_price * cart_item.quantity)
         quantity += cart_item.quantity
     grand_total = total
-    print(grand_total)
+    print('grand_total:',grand_total)
     if request.method == 'POST':
         form = OrderForm(request.POST)
        
@@ -137,7 +137,7 @@ def payments(request):
         orderproduct.user_id = request.user.id
         orderproduct.product_id = item.product_id
         orderproduct.quantity = item.quantity
-        orderproduct.product_price = item.product.price
+        orderproduct.product_price = item.product.offer_price
         orderproduct.ordered = True
         orderproduct.save()
     

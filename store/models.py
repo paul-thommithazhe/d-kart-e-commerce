@@ -12,6 +12,7 @@ from django.db import models
 from category.models import Category, SubCategory
 from django.db.models import CharField, Model
 from django_mysql.models import ListCharField
+from django.core.validators import MinValueValidator,MaxValueValidator
 
 class Product(models.Model):
     product_name = models.CharField(max_length=50, unique=True)
@@ -19,7 +20,7 @@ class Product(models.Model):
     description = models.TextField(max_length=500, blank=True)
     price = models.IntegerField()
     offer_price = models.IntegerField(default=0)
-    offer = models.IntegerField(default=0.0)
+    offer = models.IntegerField(default=0,validators=[MinValueValidator(0),MaxValueValidator(90)])
     images = models.ImageField(upload_to='images/products', blank=True)
     images_two = models.ImageField(upload_to='images/products', blank=True)
     images_three = models.ImageField(upload_to='images/products', blank=True)
@@ -29,7 +30,7 @@ class Product(models.Model):
     brand = models.ForeignKey(SubCategory, on_delete=models.CASCADE,null=True)
     created_date = models.DateTimeField(auto_now_add=True)
     modified_date = models.DateTimeField(auto_now_add=True)
-    size  = ListCharField(base_field=CharField(max_length=10),size = 4,max_length =(4 * 11),null = True)
+    # size  = ListCharField(base_field=CharField(max_length=10),size = 4,max_length =(4 * 11),null = True)
     def get_url(self):
         return reverse('product_detail', args=[self.category.slug, self.slug])
 

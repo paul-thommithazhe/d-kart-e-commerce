@@ -57,8 +57,8 @@
                                         {% for user in users %}
                                         {% if not user.is_superuser %}
                                         <tr>
-                                            <th scope="row"> <a href="#" class="question_content"> {{ user.first_name }}</a></th>
-                                            <td>{{ user.last_name }}</td>
+                                            <th scope="row"> <a href="#" class="question_content"> {{ user.first_name | capfirst }}</a></th>
+                                            <td>{{ user.last_name | capfirst }}</td>
                                             <td>{{ user.email }}</td>
                                             <td>{{ user.phone_number}}</td>
                                             <td>{{ user.username}}</td>

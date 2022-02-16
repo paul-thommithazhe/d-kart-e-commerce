@@ -39,15 +39,16 @@ def add_cart(request,product_id):
 
 
         is_cart_item_exists = CartItem.objects.filter(product=product, user=current_user).exists()
+        print(product_variation)
         if is_cart_item_exists:
             cart_item = CartItem.objects.filter(product=product, user=current_user)
             ex_var_list = []
             id = []
             for item in cart_item:
-                existing_variation = item.variations.all()
+                existing_variation = item.variations.all()[::-1]
                 ex_var_list.append(list(existing_variation))
                 id.append(item.id)
-
+            print(ex_var_list)
             if product_variation in ex_var_list:
                 # increase the cart item quantity
                 index = ex_var_list.index(product_variation)
@@ -103,7 +104,7 @@ def add_cart(request,product_id):
             ex_var_list = []
             id = []
             for item in cart_item:
-                existing_variation = item.variations.all()
+                existing_variation = item.variations.all()[::-1]
                 ex_var_list.append(list(existing_variation))
                 id.append(item.id)
 

@@ -80,8 +80,8 @@
                 <!--   -->
             </div> <!-- price-wrap .// -->
         </td>
-        <td class="text-right md-3"> 
-            <a href="{% url 'remove_cart_item' cart_item.product.id cart_item.id %}" class="btn btn-danger"> Remove</a>
+        <td class="text-right md-3" style="color:white"> 
+            <a onclick="remove_cart_item({{cart_item.product.id}},{{cart_item.id}})" class="btn btn-danger" id="remove_cart"> Remove</a>
         </td>
     </tr>
     {% endfor %}
@@ -103,8 +103,8 @@
                   <dd class="text-right"> {{ tax }}</dd> 
                 </dl> -->
                 <dl class="dlist-align">
-                  <dt>Grand Total:</dt>
-                  $<dd class="text-right text-dark b" id="grand_total"><strong>{{ grand_total }}</strong></dd>
+                  <dt class="text-center">Grand Total:</dt>
+                  $<dd class="text-left text-dark b" id="grand_total"><strong>{{ grand_total }}</strong></dd>
                 </dl>
                 <hr>
                 <p class="text-center mb-3">
@@ -140,7 +140,8 @@ $.ajax({
     dataType:'json',
     success:function(red){
         if(red.f==1){
-            alert("out of stock")
+          
+            Swal.fire('Out of stock')
         }
         else{
             $("#qty"+id).val(red.qty)
@@ -152,6 +153,23 @@ $.ajax({
 })
 })
 
-
 </script>
+<script>
+    function remove_cart_item(id1,id2){
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Do you really want to delete  it!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+                window.location='/cart/remove_cart_item/'+id1+ '/' +id2+'/'
+            }
+          })
+    }
+</script>
+
 {% endblock content %}

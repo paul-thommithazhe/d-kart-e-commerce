@@ -20,7 +20,7 @@
                             <div class="card-body">
                                 <h5 class="card-title">Total Orders</h5>
                                 <h4>{{ orders_count }}</h4>
-                                <a href="">View Orders</a>
+                                <a href="{% url 'my_orders'  %}">View Orders</a>
                             </div>
                             
                         </div>
@@ -33,7 +33,7 @@
                                 <p class="card-title"><strong>Name :</strong> {{ user.first_name |capfirst}}</p>
                                 <p class="card-title"><strong>Email :</strong> {{ user.email }}</p>
                                 <p class="card-title"> <strong>Phone Number:</strong> {{ user.phone_number }}</p>
-                                <a href="">View Orders</a>
+                             
                             </div>
                             
                         </div>

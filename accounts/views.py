@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import authenticate
 from django.contrib import messages, auth
 
-from orders.models import Order
+from orders.models import *
 from .twilio import otp_send,otp_verify
 from carts.models import Cart,CartItem
 from django.http import HttpResponse
@@ -47,8 +47,11 @@ def register(request):
                 print('redirecting to otp page')
                 return redirect('otp')
             except:
-                pass   
-    
+                pass  
+        else:
+            messages.error(request,'enter valid details')
+            return redirect('register') 
+                
     reg_form = RegistrationForm()
     context = {
         'reg_form': reg_form
@@ -159,13 +162,16 @@ def otp(request):
                     print('------')
                     
                     print('helooooooooooo')
-                    auth.login(request.user_account)
+                    auth.login(request,user_account)
                     return redirect('/')
                 elif not user_account.is_active:
                     user_account.is_active = True
+                    print('============================================================================')
                     user_account.save()
+                    request.session['email'] = user_account.email
+                    auth.login(request, user_account)
                     try:
-                        del request.session['phone']
+                        del request.session['phone_number']
                         return redirect('/')
                     except:
                         return redirect('/')
@@ -304,3 +310,12 @@ def change_password(request):
 
         return render(request,'accounts/change_password.html')
     return redirect('login')
+
+def order_detail(request,order_id):
+    order_detail = OrderProduct.objects.filter(order__order_number = order_id)
+    order = Order.objects.get(order_number = order_id)
+    context = { 
+        'order_detail':order_detail,
+        'order':order,
+    }
+    return render(request,'accounts/order_detail.html',context)

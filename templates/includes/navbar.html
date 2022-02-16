@@ -58,7 +58,7 @@
                         <div>
                             
                             <div class="d-flex">
-                                <span style="margin-top:0.7em">Welcome {{ user.first_name }}</span>
+                                <span style="margin-top:0.7em">Welcome {{ user.first_name | capfirst}}</span>
                                 <a href="{% url 'logout' %}" class="ml-3 btn btn-primary" style="color: white;">Logout</a>
                             </div>
                         </div>

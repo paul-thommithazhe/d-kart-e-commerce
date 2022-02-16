@@ -2,12 +2,13 @@ from email.policy import default
 from tabnanny import verbose
 from django.db import models
 from django.urls import reverse
+from django.core.validators import MinValueValidator,MaxValueValidator
 # Create your models here.
 class Category(models.Model):
     category_name = models.CharField(max_length=50,unique= True)
     slug          = models.SlugField(max_length=255,unique= True)
     description   = models.TextField(max_length=255)
-    category_offer = models.IntegerField(default = 0)
+    category_offer = models.IntegerField(default = 0,validators=[MinValueValidator(0),MaxValueValidator(90)])
       
     class Meta:
         verbose_name        = 'category'
