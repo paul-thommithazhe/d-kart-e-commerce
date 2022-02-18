@@ -1,6 +1,6 @@
 import datetime
 from email import message
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.contrib import messages
 
@@ -30,7 +30,7 @@ def place_order(request, total=0, quantity=0):
     grand_total = total
     print('grand_total:',grand_total)
     if request.method == 'POST':
-        form = OrderForm(request.POST)
+        form = OrderForm(request.POST,use_required_attribute=False)
        
             # Store all the billing information inside Order table
 
@@ -112,6 +112,7 @@ def place_order(request, total=0, quantity=0):
 
 def payments(request):
     body = json.loads(request.body)
+    print(body)
     order = Order.objects.get(user = request.user, is_ordered = False, order_number = body['orderID'])
 
     payment = Payment(
@@ -155,10 +156,30 @@ def payments(request):
     
     CartItem.objects.filter(user=request.user).delete()
 
-
-    return render(request, 'orders/payment.html')
-
+    data = {
+        'order_number':order.order_number,
+        'transID':payment.payment_id
+    }
+    return JsonResponse(data)
 
 def order_complete(request):
-    return render(request,'orders/order_complete.html')
+    order_number = request.GET.get('order_number')
+    transID = request.GET.get('payment_id')
+
+    try:
+        order = Order.objects.get(order_number = order_number, is_ordered = True)
+        ordered_products = OrderProduct.objects.filter(order_id = order.id)
+        payment = Payment.objects.get(payment_id = transID)
+        context = {
+            'order':order,
+            'ordered_products':ordered_products,
+            'order_number':order.order_number,
+            'transID':payment.payment_id,
+            'payment':payment,
+
+        }
+        return render(request,'orders/order_complete.html',context)
+
+    except(Payment.DoesNotExist,Order.DoesNotExist):
+        return redirect('home')
 

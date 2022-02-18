@@ -73,8 +73,8 @@
         <td> 
             <div class="price-wrap"> 
                
-                <var class="price" id="sub{{ cart_item.id }}">Rs.{{ cart_item.sub_total }} </var> 
-                <small class="text-muted" style="color: black !important;"> Rs.{{ cart_item.product.offer_price }} each </small>
+                <var class="price" id="sub{{ cart_item.id }}">${{ cart_item.sub_total }} </var> 
+                <small class="text-muted" style="color: black !important;"> $.{{ cart_item.product.offer_price }} each </small>
                
                 
                 <!--   -->
@@ -171,5 +171,45 @@ $.ajax({
           })
     }
 </script>
+<!-- <script>
+    function remove_cart_item(id1,id2){
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+              confirmButton: 'btn btn-success',
+              cancelButton: 'btn btn-danger'
+            },
+            buttonsStyling: false
+          })
+          
+          swalWithBootstrapButtons.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+          }).then((result) => {
+            if (result.isConfirmed) {
+              swalWithBootstrapButtons.fire(
+                'Deleted!',
+                'Your file has been deleted.',
+                'success',
+                 window.location='/cart/remove_cart_item/'+id1+ '/' +id2+'/'
+              )
+              
+            } else if (
+              /* Read more about handling dismissals below */
+              result.dismiss === Swal.DismissReason.cancel
+            ) {
+              swalWithBootstrapButtons.fire(
+                'Cancelled',
+                'Your imaginary file is safe :)',
+                'error'
+              )
+            }
+          })
+    }
+</script> -->
 
 {% endblock content %}

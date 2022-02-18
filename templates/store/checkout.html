@@ -8,10 +8,12 @@
     <div class="container">
         {% include 'includes/alerts.html' %}
         <!-- ============================ COMPONENT 1 ================================= -->
+        <a href="#" class="btn btn-light mb-3"> <i class="fa fa-plus"></i> Add new address </a> 
         <div class="d-md-flex" style="justify-content: space-evenly;">
             <aside class="">
                 {% for table in add_table %}
-                <div class="card mt-3">  
+                <div class="card mt-3"> 
+                    
                     <div class="card-body">
                         <div class="row">
                             <div class="form-check col-4">
@@ -111,6 +113,7 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                {% if cart_items %}
                                 {% for cart_item in cart_items %}
                                 <tr>
                                     <td>
@@ -139,6 +142,34 @@
 
                                 </tr>
                                 {% endfor %}
+                                {% else %}
+                                <tr>
+                                    <td>
+                                        <figure class="itemside align-items-center">
+                                            <div class="aside"><img src="{{ pro.images.url }}"
+                                                    class="img-sm">
+                                            </div>
+                                            <figcaption class="info">
+                                                <a href="#"
+                                                    class="title text-dark">{{ pro.product_name }}</a>
+                                                <!-- <p class="text-muted small">Color: 25 Mpx <br> Size: Canon</p> -->
+                                            </figcaption>
+                                        </figure>
+                                    </td>
+                                    <td>
+                                        <label for="">1</label>
+
+                                    </td>
+                                    <td>
+                                        <div class="price-wrap">
+                                            <var class="price">$.{{ pro.offer_price  }}</var>
+                                            <small class="text-muted" style="color: black !important;">
+                                                $.{{ pro.offer_price }} each </small>
+                                        </div> <!-- price-wrap .// -->
+                                    </td>
+
+                                </tr>
+                                {% endif %}
                             </tbody>
                         </table>
                         <button type="submit" name="submit" class="btn btn-primary btn-block">Place order</button>

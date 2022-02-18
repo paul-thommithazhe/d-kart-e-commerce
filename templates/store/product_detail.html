@@ -38,7 +38,7 @@
                         {% if single_product.category.category_offer > 0 or single_product.offer > 0 %}
                         <div class="mb-3">
                           
-                            <var class="price h4">Rs.{{ single_product.offer_price }}</var>
+                            <var class="price h4">${{ single_product.offer_price }}</var>
                             <del>${{single_product.price}}</del>
                             {% if single_product.category.category_offer >= single_product.offer %}
                             <span style="color: rgb(34, 235, 44);">({{ single_product.category.category_offer}}% off)</span>
@@ -92,9 +92,10 @@
                         {% else %}
 
 
-
+                        <input type="hidden" name="buy_now_btn" value="" id="buy_now_btn">
                         <button type="button" class="btn  btn-primary" id="add_cart_btn"> <span class="text">Add to cart</span> <i
                                 class="fas fa-shopping-cart"></i> </button>
+                        <button type="button" class="btn btn-warning" id="buy_now">Buy Now</button>
                         <!-- <button type="submit" class="btn  btn-primary"> <span class="text">Buy Now</span> <i class="fas fa-shopping-cart"></i> </button> -->
 
                         <!-- <a href="{% url 'add_cart' single_product.id %}" class="btn  btn-primary"> <span class="text">Add to cart</span> <i class="fas fa-shopping-cart"></i> </a> -->
@@ -150,6 +151,28 @@
 
     document.getElementById('add_cart_btn').addEventListener("click", function(){
 
+
+        var color = document.getElementById("color").value;
+        var size  = document.getElementById("size").value;
+        document.getElementById('buy_now_btn').value = '0'
+        
+
+
+
+        if(size == 'select'){
+            document.getElementById("color-err").innerHTML='select size';
+        } else if(color == 'select'){
+            document.getElementById("color-err").innerHTML='';
+            document.getElementById("size-err").innerHTML='select color';
+        }else{
+            document.getElementById("add_to_cart").submit()
+        }
+
+    })
+    document.getElementById('buy_now').addEventListener("click", function(){
+
+        document.getElementById('buy_now_btn').value = '1'
+        console.log(document.getElementById('buy_now_btn').value)
 
         var color = document.getElementById("color").value;
         var size  = document.getElementById("size").value;

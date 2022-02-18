@@ -58,3 +58,13 @@ $(document).ready(function() {
 }); 
 // jquery end
 
+// $(document).ready(function() {
+//     // messages timeout for 10 sec 
+//     setTimeout(function() {
+//         $('#message').fadeOut('slow')
+//     }, 10000)});
+window.setTimeout(function() {
+    $("#message").fadeTo(400, 0).slideUp(400, function(){
+      $(this).remove();
+   });
+ }, 2000);

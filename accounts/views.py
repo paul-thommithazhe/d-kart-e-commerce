@@ -1,3 +1,4 @@
+from email import message
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import authenticate
@@ -172,6 +173,7 @@ def otp(request):
                     auth.login(request, user_account)
                     try:
                         del request.session['phone_number']
+                        messages.success(request,'you are logged in')
                         return redirect('/')
                     except:
                         return redirect('/')
@@ -237,7 +239,7 @@ def my_orders(request):
 def edit_profile(request):
     
     if request.user.is_authenticated:
-        user_form = UserForm(request.POST or None,request.FILES or None , instance = request.user)
+        user_form = UserForm(request.POST or None,request.FILES or None , instance = request.user,)
         if request.method == "POST":
             if user_form.is_valid():
                 user_form.save()
@@ -252,6 +254,11 @@ def edit_profile(request):
         
         return render(request,'accounts/edit_profile.html',context)
     return redirect('login')
+
+def edit_address(request):
+    return render(request,'accounts/edit_address.html')
+
+
 
 def change_password(request):
 
