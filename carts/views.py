@@ -171,28 +171,22 @@ def add_btn_cart(request):
         return JsonResponse({'f':1})
         
 
-    
-        
 
-
-
-def remove_cart(request,product_id,cart_item_id):
-    product = get_object_or_404(Product,id = product_id)
-    if request.user.is_authenticated:
-        cart_item = CartItem.objects.get(product= product, user = request.user,id = cart_item_id)
-    else:
-        cart = Cart.objects.get(cart_id = _cart_id(request))
-        cart_item = CartItem.objects.get(product= product, cart= cart,id = cart_item_id)
-
-    try:
-        if cart_item.quantity > 1 :
-            cart_item.quantity -= 1
-            cart_item.save()
-        else:
-            pass
-    except:
-        pass
-    return redirect ('cart')
+def remove_cart(request):
+    id=int(request.GET['mid'])
+    total = float(request.GET['total'])
+    cart_item = CartItem.objects.get(id = id)
+    cart_item.quantity -= 1
+    cart_item.save()
+    sub_total = cart_item.sub_total()
+    grand_total = total - cart_item.product.offer_price
+    cart_item.save()
+    context ={
+            'qty':cart_item.quantity,
+            'sub':sub_total,
+            'gt':grand_total,
+        }
+    return JsonResponse(context)
 
 def remove_cart_item(request,product_id,cart_item_id):
     product = get_object_or_404(Product, id = product_id)
@@ -207,6 +201,8 @@ def remove_cart_item(request,product_id,cart_item_id):
 
 
 def cart(request,total =0,quantity = 0,cart_items =None):
+    if request.session.has_key('buy_now'):
+        del request.session['buy_now']
     grand_total = 0
     try:
         if request.user.is_authenticated:

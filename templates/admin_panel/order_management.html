@@ -1,0 +1,174 @@
+{% extends 'admin_panel/admin_base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="main_content_iner ">
+    <div class="container-fluid p-0">
+        <div class="row justify-content-center">
+            
+            <div class="col-lg-12">
+                <div class="white_card card_height_100 mb_30">
+                    <div class="white_card_header">
+                        <div class="box_header m-0">
+                            <!-- <div class="main-title">
+                                <h3 class="m-0">Users</h3>
+                            </div> -->
+                        </div>
+                    </div>
+                    <div class="white_card_body">
+                        <div class="QA_section">
+                            <div class="white_box_tittle list_header">
+                                <a href="{% url 'order_management' %}" ><h4 style="color: cornflowerblue;">Order Management</h4></a>
+                                <div class="box_right d-flex lms_block">
+                                    <div class="serach_field_2">
+                                        <div class="search_inner">
+                                            <form  action="{% url 'search' %}" method="GET">
+                                                {% csrf_token %}
+                                                <div class="search_field">
+                                                    <!-- <input type="text"  placeholder="Search content here..." name="search"> -->
+                                                </div>
+                                                <!-- <button type="submit"><i class="ti-search"></i> </button> -->
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="add_button ml-10">
+                                        <a href="#" data-toggle="modal" data-target="#addcategory" class="btn_1">Add New</a>
+                                    </div> -->
+                                </div>
+                            </div>
+    
+                            <div class="QA_table mb_30">
+                                <!-- table-responsive -->
+                                <table class=" table lms_table_active ">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Oder Number</th>
+                                            <th scope="col">Product Name</th>
+                                            <th scope="col">User</th>
+                                            <!-- <th scope="col">Address</th> -->
+                                            <th scope="col">Quantity</th>
+                                            <th scope="col">status</th>
+                                            <!-- <th scope="col">Edit</th> -->
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                        {% for order_product in order_products %}                                     
+                                        <tr>
+                                            <th scope="row"> <a href="#" class="question_content"> {{ order_product.order.order_number | capfirst }}</a></th>
+                                            <td>{{ order_product.product | capfirst }}</td>
+                                            <td>{{ order_product.order }}</td>
+                                            <!-- <td>{{ order_product.address}}</td> -->
+                                            <td>{{ order_product.quantity}}</td>
+                                           
+                                            <td>
+                                                {% if  order_product.delivery_status == "delivered"   %}
+                                                <p style="font-weight:600 ;color:#117fe6" > Delivered</p>
+                                               
+                                                {% elif order_product.delivery_status  == "admin cancelled" %}
+                                                 <p style="font-weight:600;color:red"> Admin cancelled</p>
+                                               
+                                                {% else %}
+                                                
+                                                <form action="{% url 'order_status_update' %}" id="status_form">
+                                                    <input  type="hidden" value="{{order_product.id}}" name="id">
+                                                    <select name="status" id="update_status" oninput="document.getElementById('status_form').submit()">
+                                                        <option value="pending"  {% if order_product.delivery_status == "pending" %} selected {% endif %} >pending</option>
+                                                        <option value="shipped" {% if order_product.delivery_status == "shipped" %} selected {% endif %}>shipped</option>
+                                                        <option value="delivered">delivered</option>
+                                                        <option value="admin cancelled">cancelled</option>
+                                                    </select>
+                                                </form>
+                                                {% endif %}
+
+                                            </td>
+                                           
+                                            <!-- <td><a href="#" class="status_btn_red">Not Active</a></td> -->
+                                        
+                                            <!-- <td><a href="" class="status_btn_block">Block</a></td> -->
+                                           
+                                            <!-- <td><a href="" class="status_btn_unblock"></a></td> -->
+                                           
+                                        </tr>
+                                       
+                                        {% endfor %}
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    function changeStatus(){
+
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+<style>
+    .status_btn_block{
+        display: inline-block;
+        padding: 2px 15px;
+        font-size: 11px;
+        font-weight: 600;
+        color: rgb(240, 240, 240) !important;
+        background: #eb0b0b;
+        -webkit-border-radius: 30px;
+        -moz-border-radius: 30px;
+        border-radius: 30px;
+        text-transform: capitalize;
+        white-space: nowrap;
+        min-width: 70px;
+        text-align: center;
+      }
+    .status_btn_unblock{
+        display: inline-block;
+        padding: 2px 15px;
+        font-size: 11px;
+        font-weight: 600;
+        color: rgb(5, 5, 5) !important;
+        background: #16df0f;
+        -webkit-border-radius: 30px;
+        -moz-border-radius: 30px;
+        border-radius: 30px;
+        text-transform: capitalize;
+        white-space: nowrap;
+        min-width: 70px;
+        text-align: center;
+      }
+      .status_btn_red{
+        display: inline-block;
+        padding: 2px 15px;
+        font-size: 11px;
+        font-weight: 600;
+        color: #fff !important;
+        background: #e67327;
+        -webkit-border-radius: 30px;
+        -moz-border-radius: 30px;
+        border-radius: 30px;
+        text-transform: capitalize;
+        white-space: nowrap;
+        min-width: 70px;
+        text-align: center;
+      }
+      
+</style>
+{% endblock content %}

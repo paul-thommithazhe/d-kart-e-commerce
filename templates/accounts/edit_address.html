@@ -3,21 +3,6 @@
 
 {% block content %}
 
-
-
-<!-- REMOVE  //END -->
-
-
-
-
-
-
-<!-- ========================= SECTION PAGETOP ========================= -->
-
-<!-- ========================= SECTION PAGETOP END// ========================= -->
-
-
-<!-- ========================= SECTION CONTENT ========================= -->
 <section class="section-content padding-y">
 	<div class="container">
 	
@@ -25,30 +10,19 @@
         {% include 'includes/dashboard_sidebar.html' %}
 		<main class="col-md-9">
 
-		<a href="#" class="btn btn-light mb-3"> <i class="fa fa-plus"></i> Add new address </a>
+		<!-- <a href="#" class="btn btn-light mb-3"> <i class="fa fa-plus"></i> Add new address </a> -->
 
         <div class="row">
+            {% for address in user_address %}
             <div class="col-md-6">
                 <article class="box mb-4">
-                    <h6>London, United Kingdom</h6>
-                    <p>Building: Nestone <br> Floor: 22, Aprt: 12  </p>
-                    <a href="#" class="btn btn-light disabled"> <i class="fa fa-check"></i> Default</a> <a href="#" class="btn btn-light"> <i class="fa fa-pen"></i> </a>   <a href="#" class="btn btn-light"> <i class="text-danger fa fa-trash"></i>  </a>
+                    <h6>{{address.first_name }} {{address.last_name}}</h6>
+                    <p>Email:{{address.email}} <br> Phone:{{address.phone}}  </p>
+                    <p>{{address.address_line_1}}<br>{{address.address_line_2}}<br>{{address.state}},{{address.city}}</p>
+                    <a href="" ><a href="{% url 'user_address_edit'  address.id %}" class="btn btn-light"> <i class="fa fa-pen"></i> </a>   <a href="#" class="btn btn-light"> <i class="text-danger fa fa-trash"></i>  </a>
                 </article>
-            </div>  <!-- col.// -->
-            <div class="col-md-6">
-                <article class="box mb-4">
-                    <h6>Tashkent, Uzbekistan</h6>
-                    <p>Building one <br> Floor: 2, Aprt: 32  </p>
-                    <a href="#" class="btn btn-light">Make default</a> <a href="#" class="btn btn-light"> <i class="fa fa-pen"></i> </a>   <a href="#" class="btn btn-light"> <i class="text-danger fa fa-trash"></i>  </a>
-                </article>
-            </div>  <!-- col.// -->
-            <div class="col-md-6">
-                <article class="box mb-4">
-                    <h6>Moscow, Russia</h6>
-                    <p>Lenin street <br> Building A, Floor: 3, Aprt: 32  </p>
-                    <a href="#" class="btn btn-light">Make default</a> <a href="#" class="btn btn-light"> <i class="fa fa-pen"></i> </a>   <a href="#" class="btn btn-light"> <i class="text-danger fa fa-trash"></i>  </a>
-                </article>
-            </div>  <!-- col.// -->
+            </div>  
+             {% endfor %}
         </div> <!-- row.// -->
 
 	</main> <!-- col.// -->
@@ -56,19 +30,5 @@
 
 </div> <!-- container .//  -->
 </section>
-<!-- ========================= SECTION CONTENT END// ========================= -->
-
-
-<!-- ========================= FOOTER ========================= -->
-
-<!-- ========================= FOOTER END // ========================= -->
-
-
-
-
-
-
-
-
 
 {% endblock %}

@@ -60,6 +60,14 @@
 
 
                         <hr>
+                        {% if single_product.stock <= 0 %}
+                       
+
+                       
+                        
+                        <h2 class="text-danger" style="font-weight: 600;"> Out of Stock </h2>
+                        {% else %}
+                        <hr>
                         <div class="row">
 
                             <div class="item-option-select">
@@ -85,12 +93,6 @@
                             </div>
 
                         </div>
-
-                        <hr>
-                        {% if single_product.stock <= 0 %}
-                        <h5 class="text-danger"> out of stock </h5>
-                        {% else %}
-
 
                         <input type="hidden" name="buy_now_btn" value="" id="buy_now_btn">
                         <button type="button" class="btn  btn-primary" id="add_cart_btn"> <span class="text">Add to cart</span> <i

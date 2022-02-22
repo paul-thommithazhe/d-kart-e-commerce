@@ -118,23 +118,51 @@
             </ul>
         </li>
         <li class="">
-            <a class="has-arrow" href="#" aria-expanded="false">
-                <div class="nav_icon_small">
-                    <img src="{% static 'admin/img/menu-icon/2.svg' %}" alt="">
-                </div>
-                <div class="nav_title">
-                    <span>Offer <br> Management</span>
-                </div>
+            <a  class="has-arrow" href="#" aria-expanded="false">
+              <div class="nav_icon_small">
+                  <img src="{% static 'admin/img/menu-icon/12.svg' %}" alt="">
+              </div>
+              <div class="nav_title">
+                  <span>Brand</span>
+              </div>
             </a>
             <ul>
-              <li><a href="{% url 'admin_category_list' %}">Category Offer</a></li>
-              
-              <li><a href="mail_box.html">Product Offer</a></li>
-              <!-- <li><a href="chat.html">Chat</a></li>
-              <li><a href="faq.html">FAQ</a></li> --> -->
+              <li><a href="{% url 'admin_brand_list' %}">Brands</a></li>
+              <!-- <li><a href="">Empty page</a></li>
+              <li><a href="">Fixed Footer</a></li> -->
             </ul>
         </li>
         <li class="">
+            <a   class="has-arrow" href="#" aria-expanded="false">
+                <div class="nav_icon_small">
+                    <img src="{% static 'admin/img/menu-icon/17.svg' %}" alt="">
+                </div>
+                <div class="nav_title">
+                    <span>Offer Management</span>
+                </div>
+            </a>
+            <ul>
+                <li><a href="{% url 'cat_offer_list' %}">Category Offer</a></li>
+                <li><a href="{% url 'pro_offer_list' %}">Product Offer</a></li>
+            </ul>
+          </li>
+          <li class="">
+            <a   class="has-arrow" href="#" aria-expanded="false">
+            <div class="nav_icon_small">
+                <img src="{% static 'admin/img/menu-icon/13.svg' %} " alt="">
+            </div>
+            <div class="nav_title">
+                <span>Variation</span>
+            </div>
+            </a>
+            <ul>
+              <li><a href="{% url 'admin_variation' %}">Variation</a></li>
+              <!-- <li><a href="Product_Details.html">Variations</a></li> -->
+              <!-- <li><a href="Cart.html">Cart</a></li>
+              <li><a href="Checkout.html">Checkout</a></li> -->
+            </ul>
+          </li>
+        <!-- <li class="">
             <a   class="has-arrow" href="#" aria-expanded="false">
               <div class="nav_icon_small">
                 <img src="{% static 'admin/img/menu-icon/4.svg' %}" alt="">
@@ -143,13 +171,64 @@
                 <span>Admins</span>
             </div>
             </a>
-            <!-- <ul>
-              <li><a href="admin_list.html">Admin List</a></li>
-              <li><a href="add_new_admin.html">Add New Admin</a></li>
-            </ul> -->
-        </li>
-        
-
+            
+        </li> -->
+        <li class="">
+            <a   class="has-arrow" href="#" aria-expanded="false">
+              <div class="nav_icon_small">
+                  <img src="{% static 'admin/img/menu-icon/19.svg' %}" alt="">
+              </div>
+              <div class="nav_title">
+                  <span>Charts</span>
+              </div>
+            </a>
+            <ul>
+              <li><a href="{% url 'chart_list' %}">Charts</a></li>
+              <!-- <li><a href="apex_chart.html">Apex Charts</a></li>
+              <li><a href="chart_sparkline.html">Chart sparkline</a></li>
+              <li><a href="am_chart.html">am-charts</a></li>
+              <li><a href="nvd3_charts.html">nvd3 charts.</a></li> -->
+            </ul>
+          </li>
+          <li class="">
+            <a   class="has-arrow" href="#" aria-expanded="false">
+                <div class="nav_icon_small">
+                    <img src="{% static 'admin/img/menu-icon/16.svg' %}" alt="">
+                </div>
+                <div class="nav_title">
+                    <span>Order Management</span>
+                </div>
+            </a>
+            <ul>
+              <li><a href="{% url 'order_management' %}">Orders</a></li>
+              <!-- <li><a href="Scrollable.html">Scrollable</a></li>
+              <li><a href="notification.html">Notifications</a></li>
+              <li><a href="carousel.html">Carousel</a></li>
+              <li><a href="Pagination.html">Pagination</a></li> -->
+            </ul>
+          </li>
+          <li class="">
+            <a   class="has-arrow" href="#" aria-expanded="false">
+              <div class="nav_icon_small">
+                  <img src="{% static 'admin/img/menu-icon/20.svg' %}" alt="">
+              </div>
+              <div class="nav_title">
+                  <span>Sales Report </span>
+              </div>
+            </a>
+            <ul>
+              <li><a href="{% url 'sales_report' %}">Report</a></li>
+              <!-- <li><a href="Alerts.html">Alerts</a></li>
+              <li><a href="buttons.html">Buttons</a></li>
+              <li><a href="modal.html">modal</a></li>
+              <li><a href="dropdown.html">Droopdowns</a></li>
+              <li><a href="Badges.html">Badges</a></li>
+              <li><a href="Loading_Indicators.html">Loading Indicators</a></li>
+              <li><a href="color_plate.html">Color Plate</a></li>
+              <li><a href="typography.html">Typography</a></li>
+              <li><a href="datepicker.html">Date Picker</a></li> -->
+            </ul>
+          </li>
 
       </ul>
 </nav>
@@ -172,14 +251,14 @@
                     <div class="header_right d-flex justify-content-between align-items-center">
                         <div class="header_notification_warp d-flex align-items-center">
                             <li>
-                                <a class="bell_notification_clicker" href="#"> <img src="{% static 'admin/img/icon/bell.svg' %}" alt="">
+                                <!-- <a class="bell_notification_clicker" href="#"> <img src="{% static 'admin/img/icon/bell.svg' %}" alt="">
                                     <span>2</span>
-                                </a>
+                                </a> -->
                                 <!-- Menu_NOtification_Wrap  -->
                             <div class="Menu_NOtification_Wrap">
-                                <div class="notification_Header">
+                                <!-- <div class="notification_Header">
                                     <h4>Notifications</h4>
-                                </div>
+                                </div> -->
                                 <div class="Notification_body">
                                     <!-- single_notify  -->
                                     <div class="single_notify d-flex align-items-center">
@@ -233,30 +312,30 @@
                                     </div>
                                     <!-- single_notify  -->
                                     <div class="single_notify d-flex align-items-center">
-                                        <div class="notify_thumb">
+                                        <!-- <div class="notify_thumb">
                                             <a href="#"><img src="img/staf/3.png" alt=""></a>
-                                        </div>
-                                        <div class="notify_content">
+                                        </div> -->
+                                        <!-- <div class="notify_content">
                                             <a href="#"><h5>what a packages</h5></a>
                                             <p>Lorem ipsum dolor sit amet</p>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
-                                <div class="nofity_footer">
+                                <!-- <div class="nofity_footer">
                                     <div class="submit_button text-center pt_20">
                                         <a href="#" class="btn_1">See More</a>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                             <!--/ Menu_NOtification_Wrap  -->
                             </li>
-                            <li>
+                            <!-- <li>
                                 <a class="CHATBOX_open" href="#"> <img src="img/icon/msg.svg" alt=""> <span>2</span>  </a>
-                            </li>
+                            </li> -->
                         </div>
                         <div class="profile_info">
                             <!-- <img src="{% static 'admin/img/client_img.png' %}" alt="#"> -->
-                            <h6><a href="">Profile</a></h6>
+                            <h2><a href="" style="font-weight:900;">Profile</a></h2>
                             <div class="profile_info_iner">
                                 <div class="profile_author_name">
                                     {% if user.is_authenticated %}
@@ -265,8 +344,8 @@
                                     {% endif %}
                                 </div>
                                 <div class="profile_info_details">
-                                    <a href="#">My Profile </a>
-                                    <a href="#">Settings</a>
+                                    <!-- <a href="#">My Profile </a>
+                                    <a href="#">Settings</a> -->
                                     <a href="{% url 'admin_logout' %}">Log Out </a>
                                 </div>
                             </div>

@@ -8,7 +8,7 @@
     <div class="container">
         {% include 'includes/alerts.html' %}
         <!-- ============================ COMPONENT 1 ================================= -->
-        <a href="#" class="btn btn-light mb-3"> <i class="fa fa-plus"></i> Add new address </a> 
+        <!-- <a href="#" class="btn btn-light mb-3"> <i class="fa fa-plus"></i> Add new address </a>  -->
         <div class="d-md-flex" style="justify-content: space-evenly;">
             <aside class="">
                 {% for table in add_table %}
@@ -29,16 +29,15 @@
                                     <span>{{ table.address_line_2 }}</span>
                                     <span>{{ table.state }}</span>
                                     <span>{{ table.city }}</span>
-
-
+                                    <!-- <a href="#" class="btn btn-light mb-3"> <i class="fa fa-plus"></i> Add new address </a> -->
                                 </label>
+                                <div class="mt-3">
+                                    <a href="" ><a href="{% url 'user_address_edit' table.id %}" class="btn btn-light"> <i class="fa fa-pen"></i> </a>   <a href="#" class="btn btn-light"> <i class="text-danger fa fa-trash"></i>  </a>
+                                </div>
+                                
                             </div>
-
-
                         </div>
-
                     </div>
-
                 </div>
                 {% endfor %}
             </aside> <!-- col.// -->
@@ -96,13 +95,9 @@
 
         </div>
         <div class="row">
-
-
             <aside class="col-lg-12 mt-3">
-
                 <div class="card">
                     <div class="card-body">
-
                         <table class="table table-borderless table-shopping-cart">
                             <thead class="text-muted">
                                 <tr class="small text-uppercase">

@@ -79,3 +79,16 @@ def product_detail(request,category_slug=None,product_slug=None):
         'cat_offer':cat_offer,
     }
     return render(request,'store/product_detail.html',context)
+
+def price_filter(request):
+    min = request.GET['min'] 
+    max = request.GET['max'] 
+   
+    price_filter = Product.objects.filter(offer_price__gte=min, offer_price__lte = max)
+   
+    # print(price_filter)
+    context = {
+        'products':price_filter,
+    }
+    
+    return render(request,'store/store.html',context)

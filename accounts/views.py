@@ -1,8 +1,11 @@
+from ast import Add
 from email import message
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import authenticate
 from django.contrib import messages, auth
+from orders.forms import AddressTableForm
+# from orders.forms import AddressTableForm
 
 from orders.models import *
 from .twilio import otp_send,otp_verify
@@ -142,10 +145,6 @@ def logout(request):
     if request.session.has_key('email'):
         del request.session['email']
     auth.logout(request)
-   
-    print('------------------------------------------------------------------------------')
-    
-    
     messages.success(request, 'you are logged out.')
     return redirect('login')
 
@@ -167,7 +166,6 @@ def otp(request):
                     return redirect('/')
                 elif not user_account.is_active:
                     user_account.is_active = True
-                    print('============================================================================')
                     user_account.save()
                     request.session['email'] = user_account.email
                     auth.login(request, user_account)
@@ -256,8 +254,17 @@ def edit_profile(request):
     return redirect('login')
 
 def edit_address(request):
-    return render(request,'accounts/edit_address.html')
+    user = request.user
+    user_address = AddressTable.objects.filter(user = request.user)
+    full_name = user.first_name + ''+ user.last_name
+    context = {
+        'user_address':user_address,
+        'full_name':full_name,
+    }
+    return render(request,'accounts/edit_address.html',context)
 
+def user_edit_address(request,id):
+    pass
 
 
 def change_password(request):
@@ -326,3 +333,27 @@ def order_detail(request,order_id):
         'order':order,
     }
     return render(request,'accounts/order_detail.html',context)
+
+def resend(request):
+    try:
+        otp_send(request.session['phone_number'])
+        print('//////////////////////////////')
+    except:
+        messages.error(request,'invalid otp')
+        
+    return render(request,'accounts/otp.html')
+
+def user_address_edit(request,id):
+    address = AddressTable.objects.get(id=id)
+    addr_form = AddressTableForm(request.POST or None,request.FILES or None,instance=address)
+    if request.method == "POST":
+        if addr_form.is_valid():
+            addr_form.save()
+            messages.success(request,'address updated successfully')
+            return redirect('checkout')
+    context = {'addr_form': addr_form,'id':id}
+        
+    return render(request,'accounts/user_edit_address.html', context)
+
+def user_address_delete(request):
+    pass

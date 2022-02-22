@@ -1,6 +1,23 @@
 {% extends 'home/base.html' %}
 {% load static %}
 {% block content %}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+<!-- MDB -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.css" rel="stylesheet" />
+<style>
+	.card-product-grid{
+		
+		box-shadow: 0 5px 15px rgb(0 0 0 / 10%) !important;
+		transition: all 0.25s linear;
+
+	}
+	.card-product-grid:hover{
+		transform: scale(1.06);
+	}
+</style>
 <!-- ========================= SECTION PAGETOP ========================= -->
 <section class="section-pagetop bg">
 	<div class="container">
@@ -58,14 +75,14 @@
 							</div> <!-- card-body.// -->
 						</div>
 					</article>
-					<article class="filter-group">
+					<!-- <article class="filter-group">
 						<header class="card-header">
 							<a href="#" data-toggle="collapse" data-target="#collapse_4" aria-expanded="true" class="">
 								<i class="icon-control fa fa-chevron-down"></i>
 								<h6 class="title">Sizes </h6>
 							</a>
-						</header>
-						<div class="filter-content collapse show" id="collapse_4">
+						</header> -->
+						<!-- <div class="filter-content collapse show" id="collapse_4">
 							<div class="card-body">
 								<label class="checkbox-btn">
 									<input type="checkbox">
@@ -87,8 +104,8 @@
 									<span class="btn btn-light"> XXL </span>
 								</label>
 							</div>
-						</div>
-					</article> 
+						</div> -->
+					<!-- </article>  -->
 
 					<article class="filter-group">
 						<header class="card-header">
@@ -99,34 +116,33 @@
 						</header>
 						<div class="filter-content collapse show" id="collapse_3">
 							<div class="card-body">
-								<div class="form-row">
-									<div class="form-group col-md-6">
-										<label>Min</label>
-										
-										<select class="mr-2 form-control">
-											<option value="0">$0</option>
-											<option value="50">$50</option>
-											<option value="100">$100</option>
-											<option value="150">$150</option>
-											<option value="200">$200</option>
-											<option value="500">$500</option>
-											<option value="1000">$1000</option>
-										</select>
+								<form action="{% url 'price_filter' %}">
+									<div class="form-row">
+										<div class="form-group col-md-6">
+											<label>Min</label>
+
+
+											<label class="form-label" for="customRange2">$0</label>
+											<div class="range">
+												<input type="range" class="form-range"  name="min" min="0"  id="customRange2" />
+											</div>
+											
+											
+										</div>
+										<div class="form-group text-right col-md-6" >
+											<label>Max</label>
+											
+											<label class="form-label" for="customRange2">$100</label>
+											<div class="range">
+												<input type="range" class="form-range" name="max" max="100" id="customRange2" />
+											</div>
+
+
+										</div>
 									</div>
-									<div class="form-group text-right col-md-6">
-										<label>Max</label>
-										<select class="mr-2 form-control">
-											<option value="50">$50</option>
-											<option value="100">$100</option>
-											<option value="150">$150</option>
-											<option value="200">$200</option>
-											<option value="500">$500</option>
-											<option value="1000">$1000</option>
-											<option value="2000">$2000+</option>
-										</select>
-									</div>
-								</div>
-								 <button class="btn btn-block btn-primary">Apply</button>
+									 <button type="submit" class="btn btn-block btn-primary">Apply</button>
+								</form>
+								
 							</div> 
 						</div>
 					</article> 
@@ -157,6 +173,9 @@
 								<div class="fix-height">
 									<h6>{{ product.brand }}</h6>
 									<a href="{{ product.get_url }}" class="title">{{ product.product_name }}</a>
+									{% if product.stock <= 0 %}
+									<h6 style="color:red">Out of stock</h6>
+									{% endif %}
 									{% if product.category.category_offer > 0 or product.offer > 0 %}
 									<div class="price-wrap mt-2">
 										<span class="price">${{ product.offer_price }}</span>
@@ -181,9 +200,10 @@
 										<a href="{{ product.get_url }}" class="btn btn-block btn-primary" style="text-align: center;">view details </a>
 									</div>
 									<div class="ml-3">
-										<a href="{{ product.get_url }}" class="btn btn-block btn-warning" style="text-align: center;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+										<!-- <a href="{{ product.get_url }}" class="btn btn-block btn-warning" style="text-align: center;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
 											<path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
-										  </svg></a>
+										  </svg>
+										</a> -->
 									</div>
 								</div>
 								
@@ -220,5 +240,6 @@
 
 <!-- ========================= FOOTER END // ========================= -->
 
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.js"></script>
 
 {% endblock content %}

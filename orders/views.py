@@ -1,10 +1,11 @@
 import datetime
 from email import message
+import re
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.contrib import messages
 
-from store.models import Product
+from store.models import Product, Variation
 from .forms import OrderForm
 from carts.models import CartItem
 from .models import AddressTable, Order, OrderProduct, Payment
@@ -14,33 +15,47 @@ import json
 from django.views.decorators.csrf import csrf_protect
 
 
+import razorpay
+client = razorpay.Client(
+    auth=("rzp_test_ftUDx8pmsTCDs8", "HL8urXgYmQ00DZmY1SJt7rgE"))
+
+
 def place_order(request, total=0, quantity=0):
 
     current_user = request.user
-    cart_items = CartItem.objects.filter(user=current_user)
-    add_table =  AddressTable.objects.filter(user = current_user)
-    cart_count = cart_items.count()
-    if cart_count <= 0:
-        return redirect('store')
+    add_table = AddressTable.objects.filter(user=current_user)
+    if request.session.has_key('buy_now'):
+        var_id = request.session['buy_now']
+        variation = var_id.split('-')
+        varient = Variation.objects.get(id=int(variation[0]))
+        pro = Product.objects.get(id=varient.product.id)
+        total = pro.offer_price
+        quantity = 1
+    else:
+        cart_items = CartItem.objects.filter(user=current_user)
+        cart_count = cart_items.count()
+        if cart_count <= 0:
+            return redirect('store')
 
-    grand_total = 0
-    for cart_item in cart_items:
-        total += (cart_item.product.offer_price * cart_item.quantity)
-        quantity += cart_item.quantity
+        grand_total = 0
+        for cart_item in cart_items:
+            total += (cart_item.product.offer_price * cart_item.quantity)
+            quantity += cart_item.quantity
     grand_total = total
-    print('grand_total:',grand_total)
+    print('grand_total:', grand_total)
     if request.method == 'POST':
-        form = OrderForm(request.POST,use_required_attribute=False)
-       
-            # Store all the billing information inside Order table
+        form = OrderForm(request.POST, use_required_attribute=False)
+
+        # Store all the billing information inside Order table
 
         data = Order()
         data.order_total = grand_total
         data.user = current_user
-        if request.POST['addr_id']!='-1' or form.is_valid():
-            
-            if request.POST['addr_id']!='-1':
-                add_table = AddressTable.objects.get(id = int(request.POST['addr_id']))
+        if request.POST['addr_id'] != '-1' or form.is_valid():
+
+            if request.POST['addr_id'] != '-1':
+                add_table = AddressTable.objects.get(
+                    id=int(request.POST['addr_id']))
                 data.first_name = add_table.first_name
                 data.last_name = add_table.last_name
                 data.phone = add_table.phone
@@ -61,9 +76,9 @@ def place_order(request, total=0, quantity=0):
                 data.city = form.cleaned_data['city']
                 data.save()
                 AddressTable.objects.create(user=data.user, first_name=data.first_name, last_name=data.last_name,
-                                        phone=data.phone, email=data.email, address_line_1=data.address_line_1, address_line_2=data.address_line_2, state=data.state, city=data.city)
+                                            phone=data.phone, email=data.email, address_line_1=data.address_line_1, address_line_2=data.address_line_2, state=data.state, city=data.city)
             # Generate order number
-            
+
             yr = int(datetime.date.today().strftime('%Y'))
             dt = int(datetime.date.today().strftime('%d'))
             mt = int(datetime.date.today().strftime('%m'))
@@ -72,18 +87,13 @@ def place_order(request, total=0, quantity=0):
             order_number = current_date + str(data.id)
             data.order_number = order_number
             data.save()
-            
-            
+
             order = Order.objects.get(
                 user=current_user, is_ordered=False, order_number=order_number)
 
-           
-
-            import razorpay
-            client = razorpay.Client(auth=("rzp_test_ftUDx8pmsTCDs8", "HL8urXgYmQ00DZmY1SJt7rgE"))
 
             DATA = {
-                "amount": 100,
+                "amount": grand_total *100,
                 "currency": "INR",
                 "receipt": "receipt#1",
                 "notes": {
@@ -91,95 +101,140 @@ def place_order(request, total=0, quantity=0):
                     "key2": "value2"
                 }
             }
-            payment=client.order.create(data=DATA)
+            payment = client.order.create(data=DATA)
             context = {
                 'order': order,
-                'cart_items': cart_items,
                 'total': total,
                 'grand_total': grand_total,
-                'payment':payment,
+                'payment': payment['id'],
             }
 
             return render(request, 'orders/payment.html', context)
-        
 
         else:
             messages.error(request, 'enter details correctly')
-            return render(request, 'store/checkout.html', {'cart_items': cart_items,'add_table':add_table})
+            return render(request, 'store/checkout.html', {'cart_items': cart_items, 'add_table': add_table})
 
     # return render(request,'store/checkout.html')
 
 
 def payments(request):
-    body = json.loads(request.body)
-    print(body)
-    order = Order.objects.get(user = request.user, is_ordered = False, order_number = body['orderID'])
+    
+    if request.method == 'GET' and request.GET['payment_method']  == 'razorpay':
+        order = Order.objects.get( user=request.user, is_ordered=False, order_number=request.GET['orderID'] )
 
-    payment = Payment(
-        user = request.user,
-        payment_id = body['transID'],
-        payment_method = body['payment_method'],
-        amount_paid = order.order_total,
-        status = body['status'],
-    )
+        payment = Payment(
+            user=request.user,payment_method=request.GET['payment_method'],
+            amount_paid=order.order_total,status=request.GET['status']
+        )
+    else:
+        body = json.loads(request.body)
+        print(body)
+
+        # if body['orderID']:
+        #     pass
+        print('.................................................................................')
+
+        order = Order.objects.get( user=request.user, is_ordered=False, order_number=body['orderID'] )
+
+        payment = Payment(
+            user=request.user,payment_id=body['transID'],payment_method=body['payment_method'],
+            amount_paid=order.order_total,status=body['status']
+        )
+
     payment.save()
     order.payment = payment
     order.is_ordered = True
     order.save()
 
-   # move cart item to order table
+    # move cart item to order table
+    if request.session.has_key('buy_now'):
 
-    cart_items = CartItem.objects.filter(user=request.user)
+        var_id = request.session['buy_now']
+        variation = var_id.split('-')
+        varient = Variation.objects.get(id=int(variation[0]))
+        pro = Product.objects.get(id=varient.product.id)
 
-    for item in cart_items:
         orderproduct = OrderProduct()
         orderproduct.order_id = order.id
         orderproduct.payment = payment
         orderproduct.user_id = request.user.id
-        orderproduct.product_id = item.product_id
-        orderproduct.quantity = item.quantity
-        orderproduct.product_price = item.product.offer_price
+        orderproduct.product = pro
+        orderproduct.quantity = 1
+        orderproduct.product_price = pro.offer_price
         orderproduct.ordered = True
         orderproduct.save()
-    
-        cart_item = CartItem.objects.get(id=item.id)
-        product_variation = cart_item.variations.all() 
-        orderproduct = OrderProduct.objects.get(id= orderproduct.id)
+        orderproduct = OrderProduct.objects.get(id=orderproduct.id)
+        product_variation = []
+        for i in range(2):
+            product_variation.append(
+                Variation.objects.get(id=int(variation[i])))
         orderproduct.variations.set(product_variation)
-        orderproduct.save()    
+        orderproduct.save()
+        pro.stock -= 1
+        pro.save()
 
-        #stock product delete
+        del request.session['buy_now']
 
-        product = Product.objects.get(id = item.product_id)
-        product.stock -= item.quantity
-        product.save()
+    else:
+        cart_items = CartItem.objects.filter(user=request.user)
+
+        for item in cart_items:
+            orderproduct = OrderProduct()
+            orderproduct.order_id = order.id
+            orderproduct.payment = payment
+            orderproduct.user_id = request.user.id
+            orderproduct.product_id = item.product_id
+            orderproduct.quantity = item.quantity
+            orderproduct.product_price = item.product.offer_price
+            orderproduct.ordered = True
+            orderproduct.save()
+
+            cart_item = CartItem.objects.get(id=item.id)
+            product_variation = cart_item.variations.all()
+            orderproduct = OrderProduct.objects.get(id=orderproduct.id)
+            print(product_variation)
+            orderproduct.variations.set(product_variation)
+            orderproduct.save()
+
+            # stock product delete
+
+            product = Product.objects.get(id=item.product_id)
+            product.stock -= item.quantity
+            product.save()
+
+        CartItem.objects.filter(user=request.user).delete()
     
-    CartItem.objects.filter(user=request.user).delete()
+    if request.method == 'GET' and request.GET['payment_method'] == 'razorpay':
+        
+        return redirect("/orders/order_complete/?order_number="+str(order.order_number))
 
     data = {
-        'order_number':order.order_number,
-        'transID':payment.payment_id
+        'order_number': order.order_number,
+        'transID': payment.payment_id
     }
+
     return JsonResponse(data)
 
+
 def order_complete(request):
-    order_number = request.GET.get('order_number')
-    transID = request.GET.get('payment_id')
+    order_number = int(request.GET.get('order_number'))
+    transID = request.GET.get('payment_id' or None)
 
     try:
-        order = Order.objects.get(order_number = order_number, is_ordered = True)
-        ordered_products = OrderProduct.objects.filter(order_id = order.id)
-        payment = Payment.objects.get(payment_id = transID)
+        order = Order.objects.get(order_number=order_number, is_ordered=True)
+        orderpro=OrderProduct.objects.filter(order=order)[0]
+        ordered_products = OrderProduct.objects.filter(order_id=order.id)
+        # payment = Payment.objects.get(payment_id=transID)
         context = {
-            'order':order,
-            'ordered_products':ordered_products,
-            'order_number':order.order_number,
-            'transID':payment.payment_id,
-            'payment':payment,
+            'order': order,
+            'ordered_products': ordered_products,
+            'order_number': order.order_number,
+            'transID': orderpro.payment.payment_id,
+            'payment': orderpro.payment,
 
         }
-        return render(request,'orders/order_complete.html',context)
+        return render(request, 'orders/order_complete.html', context)
 
-    except(Payment.DoesNotExist,Order.DoesNotExist):
+    except(Payment.DoesNotExist, Order.DoesNotExist):
         return redirect('home')
-

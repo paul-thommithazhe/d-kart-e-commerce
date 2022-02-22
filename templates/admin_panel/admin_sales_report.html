@@ -1,0 +1,104 @@
+{% extends 'admin_panel/admin_base.html' %}
+{% load static %}
+{% load crispy_forms_filters %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sales report</title>
+</head>
+<body>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
+
+
+
+
+
+<div class="main_content_iner " style="width: 50%;">
+    <div class="container-fluid p-0">
+        <div class="row justify-content-center">
+
+            <div class="col-lg-12">
+                <div class="white_card card_height_100 mb_30">
+                    <div class="white_card_header">
+                        <div class="box_header m-0">
+                            <!-- <div class="main-title">
+                                <h3 class="m-0">Users</h3>
+                            </div> -->
+                        </div>
+                    </div>
+                    <div class="white_card_body">
+                        <a href="{% url 'export_excel' %}" class="btn btn-primary mb-3">Excel</a>
+                        <form>
+                            <input type="date" name="date_from" id="">
+                            <input type="date" name="date_to" id="">
+                            <input type="month" name="month" id="">
+                            <input type="text" name="year" id="">
+                            <button type="submit">apply</button>
+                        </form>
+                        
+                        <table id="example" class="display nowrap" style="width:100%">
+
+                            <thead>
+
+                                <tr>
+                                    <th>Product Name</th>
+                                    <th>Quantity</th>
+                                    <th>Revenue</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <script>
+                                    document.title = "Sales Report";
+                                </script>                            
+                                <script>
+                                    document.title = "Sales Report";
+                                </script>
+                                {% for report in reports %}
+                                <tr>
+                                    <td style="color: black !important;">{{ report.product__product_name }}</td>
+                                    <td style="color: black !important;">{{ report.pr_count }}</td>
+                                    <td style="color: black !important;">{{ report.a }}</td>
+
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+
+                        </table>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#example').DataTable({
+            dom: 'Bfrtip',
+            buttons: [{
+                extend: 'pdfHtml5',
+                
+            }]
+        });
+    });
+</script>
+
+</body>
+</html>
+
+<script>
+    document.title = "Sales Report";
+</script>
+{% endblock content %}

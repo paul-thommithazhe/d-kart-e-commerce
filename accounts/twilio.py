@@ -7,9 +7,9 @@ from D_kart.settings import TWILIO_ACCOUNT_SID,TWILIO_AUTH_TOKEN,service
 def otp_send(phone_number):
     account_sid = os.environ['TWILIO_ACCOUNT_SID'] = 'AC1b6d00ae3d7940130e68c68e13ae45e5'
     auth_token = os.environ['TWILIO_AUTH_TOKEN'] = '82cf4e087d342a9b9aa686d3c6327922'
-    print(phone_number)
+    print('??????????????????????????????????????')
     client = Client(account_sid, auth_token)
-   
+    print(phone_number)
 
     verification = client.verify\
         .services(service)\

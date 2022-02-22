@@ -24,10 +24,20 @@ class ProductForm(forms.ModelForm):
 class VariationForm(forms.ModelForm):
     class Meta:
         model = Variation
-        fields = ['variation_category', 'variation_value',]
+        fields = ['product','variation_category', 'variation_value',]
         widgets = {
-            'product':forms.TextInput(attrs={'class':'form-control'}),
+            'product':forms.Select(attrs={'class':'form-control'}),
             'variation_category':forms.Select(attrs={'class':'form-control'}),
             'variation_value':forms.TextInput(attrs={'class':'form-control'}),
     
+        }
+
+class ProductOfferForm(forms.ModelForm):
+
+    class Meta:
+        model = Product
+        fields = ['product_name','offer']
+        widgets = {
+            'product_name':forms.TextInput(attrs={'class':'form-control'}),
+            'offer':forms.TextInput(attrs= {'class':'form_control'}),
         }

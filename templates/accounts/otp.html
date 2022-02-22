@@ -5,20 +5,24 @@
     <div class="card d-flex justify-content-center mx-auto "style="width: 18rem;margin-top: 6em;margin-bottom:4em">
         <div class="card-body">
           {% include 'includes/alerts.html' %}
-            <form class="container d-flex justify-content-center" action="" method="POST">
+            <form class="container d-flex justify-content-center" action="{% url 'otp' %}" method="POST">
                 {% csrf_token %}
                 <div class="form-group">
                   <label for="formGroupExampleInput">Enter the OTP we sent to your registered mobile number.</label>
                   <input type="number" class="form-control mt-2"  placeholder="Enter the  otp"  style="width: 80%;" name="otp">
                  
-                  <button class="btn btn-primary mt-2" id="ver_btn" >
-                     Verify
-                  </button>
+                 <button type="submit" class="btn btn-primary mt-2" id="ver_btn" style="width: 11rem;" >
+                    Verify
+                 </button>
+                  
                 </div>
                 
               </form>
+             <a href="{% url 'resend' %}"><button class="btn btn-warning mt-2" id="resend_btn" style="display: none;">
+              Resend
+           </button></a> 
               <div class="d-flex">
-                <span class="text-danger">Resend OTP in</span>
+                <span class="text-danger" id="resend_otp">Resend OTP in</span>
                 <h6 class="ml-2"id="count"></h6>
               </div>
         </div>
@@ -26,12 +30,12 @@
    <script>
 
     
-      var i =10;
+      var i =60;
       var min=0;
-      var sec=10;
+      var sec=60;
       var x = setInterval(function(){
         if(i>=0){
-          if(sec<10){
+          if(sec<60){
             se='0'+sec
           }
           else{
@@ -49,7 +53,10 @@
         }
         else{
           clearInterval(x);
-          document.getElementById("ver_btn").innerHTML='Resend'
+          document.getElementById("resend_btn").style.display='block'
+          document.getElementById("count").style.display='none'
+          document.getElementById("resend_otp").style.display='none'
+
         }
         
       },1000)
