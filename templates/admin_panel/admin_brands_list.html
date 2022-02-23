@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block content %}
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <div class="main_content_iner ">
     <div class="container-fluid p-0">
@@ -69,12 +70,28 @@
                                            
                                             
                                             <td><a href="{% url 'brand_update' brand.id %}" class="status_btn_edit">Edit</a></td>
-                                            <td><a href="{% url 'brand_delete' brand.id %}" class="status_btn_delete">Delete</a></td>
-                                            
+                                            <td><a  class="status_btn_delete"onclick=deleteBtncat({{ brand.id }})>Delete</a></td>
+                                            <!-- href="{% url 'brand_delete' brand.id %}" -->
                                         </tr>
                                         
                                         {% endfor %}
-                                        
+                                        <script>
+                                            function deleteBtncat(id){
+                                                Swal.fire({
+                                                    title: 'Are you sure?',
+                                                    text: "Do you really want to delete  it!",
+                                                    icon: 'warning',
+                                                    showCancelButton: true,
+                                                    confirmButtonColor: '#3085d6',
+                                                    cancelButtonColor: '#d33',
+                                                    confirmButtonText: 'Yes, delete it!'
+                                                  }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        window.location='/admin_panel/brand_delete/'+id+'/'
+                                                    }
+                                                  })
+                                            }
+                                        </script>
                                     </tbody>
                                 </table>
                             </div>
@@ -120,4 +137,7 @@
       }
       
 </style>
+
+<script src="@@path/vendor/sweetalert2/dist/sweetalert2.all.min.js"></script>
+<link type="text/css" href="@@path/vendor/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
 {% endblock content %}

@@ -1,7 +1,7 @@
 from django.db import models
 from accounts.models import Account
-from store.models import Product, Variation
-
+from store.models import *
+from django.core.validators import MinValueValidator,MaxValueValidator
 # Create your models here.
 class Payment(models.Model):
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
@@ -15,6 +15,11 @@ class Payment(models.Model):
     def __str__(self):
         return self.payment_id
 
+class Coupon(models.Model):
+    coupon_code = models.CharField(max_length=20)
+    coupon_offer = models.IntegerField(default = 0,validators=[MinValueValidator(0),MaxValueValidator(90)])
+    def __str__(self):
+        return self.coupon_code
 
 class Order(models.Model):
     STATUS = (
@@ -42,6 +47,7 @@ class Order(models.Model):
     is_ordered = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    coupon = models.ForeignKey(Coupon,on_delete=models.SET_NULL,null=True)
 
     def __str__(self):
         return self.first_name
@@ -84,3 +90,4 @@ class AddressTable(models.Model):
 
     def __str__(self):
         return self.first_name
+

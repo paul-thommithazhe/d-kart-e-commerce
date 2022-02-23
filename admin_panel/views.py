@@ -21,8 +21,6 @@ from datetime import datetime
 import xlwt
 
 ##views
-
-
 def admin_login(request):
     if request.method == "POST":
         email = request.POST['email']
@@ -342,7 +340,6 @@ def unblock(request, id):
 def chart_list(request):
     user = request.user
     order = Order.objects.order_by('-created_at').filter(user_id= request.user.id, is_ordered = True)
-
     payment_payapl = Payment.objects.filter(payment_method = 'paypal').count()
     payment_razorpay = Payment.objects.filter(payment_method = 'razorpay').count()
     payment_cod = Payment.objects.filter(payment_method = 'cash on delivery').count()
@@ -351,7 +348,7 @@ def chart_list(request):
         'payment_method_razorpay':payment_razorpay,
         'payment_method_cod':payment_cod,
     }
-    return render(request,'admin_panel/admin_chart.html',context)
+    return render(request,'admin_panel/admin_home.html',context)
 
 
 

@@ -7,7 +7,7 @@
 
 
 
-
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <div class="main_content_iner ">
     <div class="container-fluid p-0">
@@ -17,9 +17,7 @@
                 <div class="white_card card_height_100 mb_30">
                     <div class="white_card_header">
                         <div class="box_header m-0">
-                            <!-- <div class="main-title">
-                                <h3 class="m-0">Users</h3>
-                            </div> -->
+                           
                         </div>
                     </div>
                     <div class="white_card_body">
@@ -28,16 +26,7 @@
                             <div class="white_box_tittle list_header">
                                 <h4>Category List</h4>
                                 <div class="box_right d-flex lms_block">
-                                    <!-- <div class="serach_field_2">
-                                        <div class="search_inner">
-                                            <form Active="#">
-                                                <div class="search_field">
-                                                    <input type="text" placeholder="Search content here...">
-                                                </div>
-                                                <button type="submit"> <i class="ti-search"></i> </button>
-                                            </form>
-                                        </div>
-                                    </div> -->
+                                   
                                     <div class="add_button ml-10">
                                         <a href="{% url 'admin_add_category' %}"  class="btn_1">Add Category</a>
                                     </div>
@@ -50,13 +39,8 @@
                                     <thead>
                                         <tr>
                                             <th scope="col">Category Name</th>
-                                            <!-- <th scope="col">Slug</th> -->
                                             <th scope="col">Edit</th>
                                             <th scope="col">Delete</th>
-                                            <!-- <th scope="col">Phone Number</th>
-                                            <th scope="col">Username</th>
-                                            <th scope="col">Active</th>
-                                            <th scope="col">Blocked/Unblocked</th> -->
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -65,22 +49,29 @@
                                         
                                         <tr>
                                             <th scope="row"> <a href="#" class="question_content"> {{ category.category_name }}</a></th>
-                                            <!-- <td>{{ category.cat_name }}</td> -->
-                                            <!-- <td>{{ user.email }}</td>
-                                            <td>{{ user.phone_number}}</td>
-                                            <td>{{ user.username}}</td> -->
-                                            
-                                            <!-- <td><a href="#" class="status_btn">Active</a></td>
-                                             -->
-                                           
-                                            
                                             <td><a href="{% url 'admin_update_category' category.id %}" class="status_btn_edit">Edit</a></td>
-                                            <td><a href="{% url 'cat_delete' category.id %}" class="status_btn_delete">Delete</a></td>
-                                            
+                                            <td><a class="status_btn_delete"onclick="deleteBtncat({{category.id}})" id="basic_alert">Delete</a></td>
+                                            <!-- {% url 'cat_delete' category.id %} -->
                                         </tr>
                                         
                                         {% endfor %}
-                                        
+                                        <script>
+                                            function deleteBtncat(id){
+                                                Swal.fire({
+                                                    title: 'Are you sure?',
+                                                    text: "Do you really want to delete  it!",
+                                                    icon: 'warning',
+                                                    showCancelButton: true,
+                                                    confirmButtonColor: '#3085d6',
+                                                    cancelButtonColor: '#d33',
+                                                    confirmButtonText: 'Yes, delete it!'
+                                                  }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        window.location='/admin_panel/cat_delete/'+id+'/'
+                                                    }
+                                                  })
+                                            }
+                                        </script>
                                     </tbody>
                                 </table>
                             </div>
@@ -129,5 +120,6 @@
 
 
 
-
+<script src="@@path/vendor/sweetalert2/dist/sweetalert2.all.min.js"></script>
+<link type="text/css" href="@@path/vendor/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
 {% endblock content %}

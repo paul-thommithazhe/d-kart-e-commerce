@@ -61,6 +61,7 @@
                   <input type="hidden" value="completed" name="status">
                   <input type="hidden" name="transID">
                   <input type="hidden" name="orderID" value="{{order.order_number}}">
+                  <input type="text" hidden value="{{ coupon }}" name="coupon">
 
                   <script
                       src="https://checkout.razorpay.com/v1/checkout.js"
@@ -100,10 +101,7 @@
                   <dt>Total price:</dt>
                   <dd class="text-right">{{ total }}</dd>
                 </dl>
-                <!-- <dl class="dlist-align">
-                  <dt>Tax:</dt>
-                  <dd class="text-right"> {{ tax }}</dd> 
-                </dl> -->
+                
                 <dl class="dlist-align">
                   <dt>Grand Total:</dt>
                   <dd class="text-right text-dark b"><strong>${{ grand_total }}</strong></dd>
@@ -189,6 +187,7 @@ var redirect_url = "{% url 'order_complete' %}"
                 transID: details.id,
                 payment_method: payment_method,
                 status: details.status,
+                coupon:"{{ coupon }}"
               }),
             })
             .then((response) => response.json())
@@ -219,6 +218,7 @@ var redirect_url = "{% url 'order_complete' %}"
         transID: '',
         payment_method: 'cash on delivery',
         status: 'pending',
+        coupon:'{{coupon}}'
       }),
     })
     .then((response) => response.json())

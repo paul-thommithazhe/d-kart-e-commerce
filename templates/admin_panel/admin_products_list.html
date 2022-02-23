@@ -83,16 +83,7 @@
                                             <td>{{ product.created_date }}</td>
                                             <td><a href="{% url 'admin_update_product' product.id %}" class="status_btn_edit">Edit</a></td>
                                             <td><a class="status_btn_delete"onclick="deleteBtn({{product.id}})" id="basic_alert">Delete</a></td>
-                                            <!-- {% if user.is_active %}
-                                            <td><a href="#" class="status_btn">Active</a></td>
-                                            {% else %}
-                                            <td><a href="#" class="status_btn_red">Not Active</a></td>
-                                            {% endif %}
-                                            {% if user.is_active %}
-                                            <td><a href="{% url 'block' user.id %}" class="status_btn_block">Block</a></td>
-                                            {% else %}
-                                            <td><a href="{% url 'unblock' user.id %}" class="status_btn_unblock">UnBlock</a></td>
-                                            {% endif %} -->
+                                           
                                         </tr>
                                         
                                         {% endfor %}

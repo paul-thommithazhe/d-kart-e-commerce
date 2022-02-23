@@ -231,7 +231,7 @@ def cart(request,total =0,quantity = 0,cart_items =None):
 def checkout(request,total =0,quantity = 0,cart_items =None):
     if request.user.is_authenticated:
         if request.session.has_key('email'):
-            print('==@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@============')
+            
             add_table =  AddressTable.objects.filter(user = request.user)
             if request.session.has_key('buy_now'):
                 variation = request.session['buy_now']

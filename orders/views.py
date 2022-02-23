@@ -4,13 +4,13 @@ import re
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.contrib import messages
-
+from django.db.models import Q
 from store.models import Product, Variation
 from .forms import OrderForm
 from carts.models import CartItem
 from .models import AddressTable, Order, OrderProduct, Payment
 import datetime
-# Create your views here.
+from .models import *
 import json
 from django.views.decorators.csrf import csrf_protect
 
@@ -22,6 +22,8 @@ client = razorpay.Client(
 
 def place_order(request, total=0, quantity=0):
 
+    coup = request.POST.get('coupon' or None)
+
     current_user = request.user
     add_table = AddressTable.objects.filter(user=current_user)
     if request.session.has_key('buy_now'):
@@ -31,6 +33,9 @@ def place_order(request, total=0, quantity=0):
         pro = Product.objects.get(id=varient.product.id)
         total = pro.offer_price
         quantity = 1
+        if coup:
+            a =Coupon.objects.get(coupon_code__iexact = coup)
+            total = total- (total * a.coupon_offer)/100
     else:
         cart_items = CartItem.objects.filter(user=current_user)
         cart_count = cart_items.count()
@@ -41,6 +46,10 @@ def place_order(request, total=0, quantity=0):
         for cart_item in cart_items:
             total += (cart_item.product.offer_price * cart_item.quantity)
             quantity += cart_item.quantity
+            if coup:
+                a =Coupon.objects.get(coupon_code__iexact = coup)
+                total =total- (total * a.coupon_offer)/100
+
     grand_total = total
     print('grand_total:', grand_total)
     if request.method == 'POST':
@@ -107,6 +116,8 @@ def place_order(request, total=0, quantity=0):
                 'total': total,
                 'grand_total': grand_total,
                 'payment': payment['id'],
+                'coupon':coup,
+  
             }
 
             return render(request, 'orders/payment.html', context)
@@ -119,24 +130,43 @@ def place_order(request, total=0, quantity=0):
 
 
 def payments(request):
+
+
     
     if request.method == 'GET' and request.GET['payment_method']  == 'razorpay':
-        order = Order.objects.get( user=request.user, is_ordered=False, order_number=request.GET['orderID'] )
+        if request.GET['coupon']:
+            coupon = Coupon.objects.get(coupon_code = request.GET['coupon'])
+            order = Order.objects.get( user=request.user, is_ordered=False, order_number=request.GET['orderID'])
+            order.coupon = coupon
+            print(coupon)
+            print('==========++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=============')
+            order.save()
+
+            print(order)
+            print('==========================================hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh')
+
+        else:
+            order = Order.objects.get( user=request.user, is_ordered=False, order_number=request.GET['orderID'] )
 
         payment = Payment(
             user=request.user,payment_method=request.GET['payment_method'],
             amount_paid=order.order_total,status=request.GET['status']
         )
     else:
+
         body = json.loads(request.body)
         print(body)
-
+        coupon = body['coupon']
+        print(coupon)
         # if body['orderID']:
         #     pass
         print('.................................................................................')
+        coupon = Coupon.objects.get(coupon_code = coupon)
 
-        order = Order.objects.get( user=request.user, is_ordered=False, order_number=body['orderID'] )
 
+
+        order = Order.objects.get( user=request.user, is_ordered=False, order_number=body['orderID'],coupen= coupon)
+        order.coupon = coupon
         payment = Payment(
             user=request.user,payment_id=body['transID'],payment_method=body['payment_method'],
             amount_paid=order.order_total,status=body['status']
@@ -238,3 +268,15 @@ def order_complete(request):
 
     except(Payment.DoesNotExist, Order.DoesNotExist):
         return redirect('home')
+
+def coupon_check(request):
+    try:
+        coup=Coupon.objects.get(coupon_code=request.GET['coup'])
+        if Order.objects.filter(Q(coupon=coup) & Q(user=request.user)).exists():
+            return JsonResponse({'f':2})
+        else:
+            tot=int(request.GET['tot'])
+            tot-=(tot*coup.coupon_offer/100)
+            return JsonResponse({'f':0,'tot':int(tot), 'coup_id':coup.id})
+    except:
+        return JsonResponse({'f':1})

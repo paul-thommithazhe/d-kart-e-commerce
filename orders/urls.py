@@ -7,5 +7,6 @@ urlpatterns = [
     path('payments/', views.payments, name='payments'),
     path('order_complete/', views.order_complete, name='order_complete'),
     path('order_complete/',views.order_complete, name ='order_complete'),
+    path('coupon_check/',views.coupon_check, name ='coupon_check'),
 
 ]

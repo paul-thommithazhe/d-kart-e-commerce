@@ -1,5 +1,3 @@
-
-
 from ast import Sub
 from random import choice, choices
 from tokenize import blank_re
