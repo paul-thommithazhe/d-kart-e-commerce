@@ -25,3 +25,13 @@ class AddressTableForm(forms.ModelForm):
             'city':forms.TextInput(attrs={'class':'form-control'}),
     
         }
+class CouponForm(forms.ModelForm):
+    class Meta:
+        model = Coupon
+        fields = ['coupon_code','coupon_offer']
+    
+        widgets = {
+        
+            'coupon_code':forms.TextInput(attrs={'class':'form-control'}),
+            'coupon_offer':forms.TextInput(attrs={'class':'form-control'}),
+        }

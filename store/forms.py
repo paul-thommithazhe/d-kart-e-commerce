@@ -41,3 +41,4 @@ class ProductOfferForm(forms.ModelForm):
             'product_name':forms.TextInput(attrs={'class':'form-control'}),
             'offer':forms.TextInput(attrs= {'class':'form_control'}),
         }
+

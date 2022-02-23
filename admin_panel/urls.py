@@ -37,5 +37,8 @@ urlpatterns = [
     path('order_status_update/',views.order_status_update,name = 'order_status_update'),
     path('sales_report',views.sales_report,name='sales_report'),
     path('export_excel',views.export_excel,name='export_excel'),
+    path('coupon_list',views.coupon_list,name='coupon_list'),
+    path('coupon_edit/<id>/',views.coupon_edit,name='coupon_edit'),
+    path('add_coupon/',views.add_coupon,name='add_coupon'),
 
 ]

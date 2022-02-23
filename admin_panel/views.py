@@ -11,6 +11,7 @@ from category.forms import CategoryForm, CategoryOfferForm, SubCategoryForm
 from unicodedata import category, name
 from django.http import HttpResponse
 from category.models import Category, SubCategory
+from orders.forms import CouponForm
 from store.forms import  *
 from accounts.models import Account
 from store.models import *
@@ -487,3 +488,45 @@ def export_excel(request):
             ws.write(row_num,col_num,str(row[col_num]),font_style)
     wb.save(response)
     return response
+
+def coupon_list(request):
+    if request.session.has_key('email'):
+        coupon = Coupon.objects.all()
+        context  = {
+            'coupons':coupon,
+        }
+        return render(request,'admin_panel/coupon_list.html',context)
+    return redirect('admin_login')
+
+def coupon_edit(request,id):
+    coupon = Coupon.objects.get(id=id)
+    coup_form = CouponForm(request.POST or None,request.FILES or None,instance=coupon)
+    if request.method == "POST":
+        if coup_form.is_valid():
+            coup_form.save()
+            messages.success(request,'coupon updated successfully')
+            return redirect('coupon_list')
+    context = {'coup_form': coup_form,'id':id}
+        
+    return render(request,'admin_panel/coupon_edit.html', context)
+
+def add_coupon(request):
+    if request.session.has_key('email'):
+        coup_form = CouponForm()
+        context = {
+            'coup_form': coup_form,
+            # 'V_form':V_form,
+        }
+        if request.method == "POST":
+            coup_form =CouponForm(request.POST, request.FILES)
+            # V_form = VariationForm(request.POST)
+            if coup_form.is_valid():
+                coupon=coup_form.save(commit=False)
+              
+    
+                coupon.save()
+            
+                # variation.save()
+                messages.success(request,'coupon added successfully')
+                return redirect('coupon_list')
+        return render(request, 'admin_panel/add_coupon.html',context)
