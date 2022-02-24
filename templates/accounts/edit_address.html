@@ -19,7 +19,7 @@
                     <h6>{{address.first_name }} {{address.last_name}}</h6>
                     <p>Email:{{address.email}} <br> Phone:{{address.phone}}  </p>
                     <p>{{address.address_line_1}}<br>{{address.address_line_2}}<br>{{address.state}},{{address.city}}</p>
-                    <a href="" ></a>   <a href="#" class="btn btn-light"> <i class="text-danger fa fa-trash"></i>  </a>
+                    <!-- <a href="{% url 'user_address_delete' address.id %}" class="btn btn-light"> <i class="text-danger fa fa-trash"></i>  </a> -->
                 </article>
             </div>  
              {% endfor %}

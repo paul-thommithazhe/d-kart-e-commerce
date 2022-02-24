@@ -36,7 +36,7 @@
                                     <div class="mt-3">
                                         <a href=""><a href="{% url 'user_address_edit' table.id %}"
                                                 class="btn btn-light">
-                                                <i class="fa fa-pen"></i> </a> <a href="#" class="btn btn-light"> <i
+                                                <i class="fa fa-pen"></i> </a> <a href="{% url 'user_address_delete' table.id %}" class="btn btn-light"> <i
                                                     class="text-danger fa fa-trash"></i> </a>
                                     </div>
 
@@ -55,11 +55,11 @@
 
 
         <p>
-            <a class="btn btn-primary mt-3 ml-2" data-toggle="collapse" href="#collapseExample" role="button"
+            <a class="btn btn-light  mt-3 ml-2 fa fa-plus" data-toggle="collapse" href="#collapseExample" role="button"
                 aria-expanded="false" aria-controls="collapseExample">
                 Add New Address
             </a>
-            <a class="btn btn-primary mt-3" data-toggle="collapse" href="#collapseExample1" role="button"
+            <a class="btn btn-primary mt-3 ml-3" data-toggle="collapse" href="#collapseExample1" role="button"
                 aria-expanded="false" aria-controls="collapseExample">
                 Have Coupon?
             </a>
@@ -223,7 +223,7 @@
                             </tbody>
                         </table>
                         <div>
-                            <h4> Grand total:<h4 id="total" data-amt="{{grand_total}}">{{grand_total}}</h4>
+                            <h4> Grand total:<h4 id="total" data-amt="{{grand_total}}">${{grand_total}}</h4>
                             </h4>
                         </div>
                         <button type="submit" name="submit" class="btn btn-primary btn-block">Place order</button>

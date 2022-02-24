@@ -263,9 +263,6 @@ def edit_address(request):
     }
     return render(request,'accounts/edit_address.html',context)
 
-def user_edit_address(request,id):
-    pass
-
 
 def change_password(request):
 
@@ -355,5 +352,11 @@ def user_address_edit(request,id):
         
     return render(request,'accounts/user_edit_address.html', context)
 
-def user_address_delete(request):
-    pass
+def user_address_delete(request,id):
+  
+   
+        addr = AddressTable.objects.get(id = id)
+        addr.delete()
+        messages.success(request,'address deleted !')
+        return redirect('checkout')
+    

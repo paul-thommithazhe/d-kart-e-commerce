@@ -156,21 +156,27 @@ def payments(request):
 
         body = json.loads(request.body)
         print(body)
-        coupon = body['coupon']
-        print(coupon)
+        coupon_code = body['coupon']
+        print(coupon_code)
         # if body['orderID']:
         #     pass
         print('.................................................................................')
-        coupon = Coupon.objects.get(coupon_code = coupon)
+        print(coupon_code)
+        if not  coupon_code  :
+            print('+++++++++++++++++++++++++++++++++++++++')
 
+            coupon = Coupon.objects.get(coupon_code = coupon_code)
+            order = Order.objects.get( user=request.user, is_ordered=False, order_number=body['orderID'],coupen= coupon)
+        else:
+            print('.................................................................................')
 
-
-        order = Order.objects.get( user=request.user, is_ordered=False, order_number=body['orderID'],coupen= coupon)
-        order.coupon = coupon
+            order = Order.objects.get( user=request.user, is_ordered=False, order_number=body['orderID'])
+        print('.................................................................................')
         payment = Payment(
             user=request.user,payment_id=body['transID'],payment_method=body['payment_method'],
             amount_paid=order.order_total,status=body['status']
         )
+    print('.................................................................................')
 
     payment.save()
     order.payment = payment
@@ -271,6 +277,7 @@ def order_complete(request):
 
 def coupon_check(request):
     try:
+        print(request.GET['coup'])
         coup=Coupon.objects.get(coupon_code=request.GET['coup'])
         if Order.objects.filter(Q(coupon=coup) & Q(user=request.user)).exists():
             return JsonResponse({'f':2})

@@ -362,7 +362,7 @@ def test(request):
 
 def order_management(request):
    
-    order_products = OrderProduct.objects.all()
+    order_products = OrderProduct.objects.all().order_by('-id')
     context = {
         'order_products':order_products
     } 
